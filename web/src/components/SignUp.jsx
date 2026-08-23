@@ -1,4 +1,4 @@
-import drishtiLogo from '../assets/drishtilogo.png'; // Make sure this matches your logo name!
+import drishtiLogo from '../assets/Drishtilabs_logo.png'; // Make sure this matches your logo name!
 
 export default function SignUp() {
   return (

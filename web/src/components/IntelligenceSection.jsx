@@ -6,7 +6,6 @@ export default function IntelligenceSection() {
     <section>
       <div className="container interactive">
         <div className="reveal">
-          {/* <div className="section-kicker mono">04 / INTELLIGENCE LAYER</div> */}
           <h2 className="section-title">
             See the defect.
             <br />
@@ -19,7 +18,7 @@ export default function IntelligenceSection() {
           </p>
         </div>
         <div className="console reveal">
-          <div className="console-top mono">
+          <div className="console-top">
             <span>DRISHTI / ASSET VIEW</span>
             <span className="orange">LIVE</span>
           </div>

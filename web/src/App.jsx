@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import './App.css'
 
 import Navbar from './components/Navbar'
@@ -12,11 +12,9 @@ import CTASection from './components/CTASection'
 import Footer from './components/Footer'
 import SignIn from './components/SignIn' 
 import SignUp from './components/SignUp'
-import Dashboard from './components/Dashboard' // <-- Ensure this file exists!
+import Dashboard from './components/Dashboard'
 
 function App() {
-  const orbRef = useRef(null)
-
   // ── Intersection Observer for Reveal Animations ──
   useEffect(() => {
     const reveals = document.querySelectorAll('.reveal')
@@ -56,7 +54,6 @@ function App() {
   if (isDashboard) {
     return (
       <>
-        <div className="orb" ref={orbRef}></div>
         <Dashboard />
       </>
     )
@@ -66,7 +63,6 @@ function App() {
   if (isSignIn) {
     return (
       <>
-        <div className="orb" ref={orbRef}></div>
         <SignIn />
       </>
     )
@@ -76,7 +72,6 @@ function App() {
   if (isSignUp) {
     return (
       <>
-        <div className="orb" ref={orbRef}></div>
         <SignUp />
       </>
     )
@@ -85,9 +80,6 @@ function App() {
   // ── Main Landing Page Render ──
   return (
     <>
-      {/* Cursor orb */}
-      <div className="orb" ref={orbRef}></div>
-
       {/* Navigation */}
       <Navbar />
 

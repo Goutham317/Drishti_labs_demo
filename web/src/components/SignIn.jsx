@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import drishtiLogo from '../assets/drishtilogo.png';
+import drishtiLogo from '../assets/Drishtilabs_logo.png';
 
 export default function SignIn() {
   // 1. Create state to hold the user's input and API status

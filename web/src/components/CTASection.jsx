@@ -5,7 +5,6 @@ export default function CTASection() {
   return (
     <section className="cta">
       <div className="container reveal">
-        {/* <div className="section-kicker mono">06 / NEXT INSPECTION</div> */}
         <h2>
           Let&rsquo;s build the future
           <br />
