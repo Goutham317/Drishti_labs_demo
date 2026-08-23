@@ -1,0 +1,58 @@
+:root {
+  --bg: #050505;
+  --bg2: #090909;
+  --panel: #0d0d0d;
+  --line: rgba(255, 255, 255, 0.10);
+  --muted: #8b8b8b;
+  --text: #f4f2ee;
+  --orange: #ff641f;
+  --orange2: #ff8a42;
+  --orange-soft: rgba(255, 100, 31, 0.18);
+  --max: 1180px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background:
+    radial-gradient(900px 560px at 88% 4%, rgba(255, 87, 25, 0.24), transparent 58%),
+    radial-gradient(700px 500px at 3% 58%, rgba(255, 76, 20, 0.08), transparent 60%),
+    var(--bg);
+  color: var(--text);
+  font-family: Manrope, system-ui, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.20;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 70px 70px;
+  mask-image: linear-gradient(to bottom, black, transparent 90%);
+  -webkit-mask-image: linear-gradient(to bottom, black, transparent 90%);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#root {
+  min-height: 100vh;
+}
