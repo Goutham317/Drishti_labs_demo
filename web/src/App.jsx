@@ -55,11 +55,11 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // ── Pointer move listener ──
-  useEffect(() => {
-    window.addEventListener('pointermove', handlePointerMove)
-    return () => window.removeEventListener('pointermove', handlePointerMove)
-  }, [handlePointerMove])
+  // // ── Pointer move listener ──
+  // useEffect(() => {
+  //   window.addEventListener('pointermove', handlePointerMove)
+  //   return () => window.removeEventListener('pointermove', handlePointerMove)
+  // }, [handlePointerMove])
 
   // ── Routing Logic ──
   const isSignIn = window.location.pathname === '/signin';

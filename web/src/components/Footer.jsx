@@ -1,7 +1,7 @@
 /**
  * Footer — Professional multi-column footer inspired by drishtilabs.in
  */
-import myLogo from '../assets/drishtilogo.png'
+import myLogo from '../assets/Drishtilabs_logo.png'
 
 export default function Footer() {
   return (
@@ -12,7 +12,13 @@ export default function Footer() {
           {/* Brand Column */}
           <div className="footer-brand">
             <a href="#top" className="footer-logo-link">
-              <img src={myLogo} alt="Drishti Labs" className="footer-logo" />
+              <img 
+                src={myLogo} 
+                alt="Drishti Labs" 
+                className="footer-logo" 
+                /* 👇 Added inline style to increase the logo size! */
+                style={{ width: '100px', height: 'auto', marginBottom: '15px' }}
+              />
             </a>
             <p className="footer-tagline">
               Structural intelligence for ageing infrastructure. We measure

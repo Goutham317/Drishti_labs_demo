@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import myLogo from '../assets/drishtilogo.png'
+import myLogo from '../assets/Drishtilabs_logo.png'
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -18,6 +18,8 @@ export default function Navbar() {
             src={myLogo}
             alt="Drishti Labs Logo"
             className="logo-img"
+            /* 👇 Added inline style to increase the logo size! */
+            style={{ height: '50px', width: 'auto' }} 
           />
           {!scrolled && <span className="brand-text">DRISHTI LABS</span>}
         </a>

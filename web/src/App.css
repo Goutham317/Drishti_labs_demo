@@ -357,3 +357,31 @@ section { padding: 130px 0; position: relative; }
     0 0 80px -15px rgba(255, 100, 31, 0.2), 
     0 0 30px -5px rgba(255, 100, 31, 0.1);
 }
+
+.signin-logo {
+  /* Increase this number to make the logo larger */
+  width: 50px; 
+  
+  /* Keeps the image from stretching out of proportion */
+  height: auto; 
+  
+  /* Ensures there is breathing room below the logo */
+  margin-bottom: 20px; 
+  
+  /* Optional: If you want to slightly round the corners of the white box */
+  border-radius: 8px; 
+}
+
+.signup-logo {
+  /* Increase this number to make the logo larger */
+  width: 50px; 
+  
+  /* Keeps the image from stretching out of proportion */
+  height: auto; 
+  
+  /* Ensures there is breathing room below the logo */
+  margin-bottom: 20px; 
+  
+  /* Optional: If you want to slightly round the corners of the white box */
+  border-radius: 8px; 
+}
