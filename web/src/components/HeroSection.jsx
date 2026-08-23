@@ -1,38 +1,60 @@
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState, useEffect, useRef } from 'react'
 
 export default function HeroSection() {
-  const [scanActive, setScanActive] = useState(false)
-  const [detectPhase, setDetectPhase] = useState(0)
+  const [scanPos, setScanPos] = useState(15) // drone X position (percentage)
+  const animRef = useRef()
 
+  // Smooth back-and-forth drone scanning
   useEffect(() => {
-    const t1 = setTimeout(() => setScanActive(true), 800)
-    const cycle = setInterval(() => {
-      setDetectPhase(p => (p + 1) % 4)
-    }, 2800)
-    return () => { clearTimeout(t1); clearInterval(cycle) }
+    let start = performance.now()
+    const DURATION = 6000 // 6s per sweep direction
+
+    const tick = (ts) => {
+      const elapsed = ts - start
+      const cycle = (elapsed % (DURATION * 2)) / (DURATION * 2)
+      // Ease in-out sine wave from 0 to 1 to 0
+      const ease = (Math.sin((cycle * Math.PI * 2) - Math.PI / 2) + 1) / 2
+      // Map to 15% -> 85% range
+      setScanPos(15 + ease * 70)
+      
+      animRef.current = requestAnimationFrame(tick)
+    }
+
+    animRef.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(animRef.current)
   }, [])
 
+  // Defect zones defined by their X position on the bridge
+  const DEFECTS = [
+    { id: 'D-01', x: 28, type: 'CRACK', depth: '3.2mm', conf: 96 },
+    { id: 'D-02', x: 50, type: 'CORROSION', depth: 'SURFACE', conf: 98 },
+    { id: 'D-03', x: 75, type: 'SPALLING', depth: '12.4mm', conf: 92 },
+  ]
+
+  // Find the active defect based on drone proximity
+  const activeDefect = useMemo(() => {
+    return DEFECTS.find(d => Math.abs(d.x - scanPos) < 8)
+  }, [scanPos])
+
+  // Generate background particles
   const particles = useMemo(() =>
-    Array.from({ length: 20 }, (_, i) => ({
+    Array.from({ length: 30 }, (_, i) => ({
       id: i,
-      left: `${5 + Math.random() * 90}%`,
-      top: `${10 + Math.random() * 80}%`,
-      delay: `${Math.random() * 5}s`,
-      dur: `${3 + Math.random() * 4}s`,
-      size: 1 + Math.random() * 2,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: 0.5 + Math.random() * 2,
+      delay: Math.random() * -5,
+      dur: 3 + Math.random() * 4,
     })), [])
 
   return (
     <section className="hero">
-      <div className="hero-atmos">
-        <div className="hero-atmos-core" />
-        <div className="hero-atmos-ring" />
-        <div className="hero-atmos-flare" />
-      </div>
+      {/* Immersive background glow */}
+      <div className="hero-glow-bg" />
 
       <div className="container hero-grid">
-        <div className="reveal">
-          <div className="eyebrow mono">NIRMAAN · IIT MADRAS / INFRASTRUCTURE INTELLIGENCE</div>
+        <div className="hero-content reveal">
+          <div className="eyebrow mono">NIRMAAN · IIT MADRAS / INTELLIGENCE</div>
           <h1>An MRI for ageing <span className="orange">infrastructure.</span></h1>
           <p className="hero-copy">
             We measure what the industry estimates. Drishti Labs turns inspection into quantified,
@@ -45,290 +67,229 @@ export default function HeroSection() {
           </div>
         </div>
 
-        <div className="hero-visual reveal" id="scan-card">
-          <div className="inspect-scene">
-            <div className="inspect-sweep" />
-
-            {/* ═══ Realistic Cable-Stayed Bridge ═══ */}
-            <div className="inspect-bridge">
-              <svg viewBox="0 0 700 400" fill="none" className="bridge-3d-svg" preserveAspectRatio="xMidYMid meet">
+        {/* ── Zoomed 3D Inspection Scene ── */}
+        <div className="hero-visual-container reveal">
+          
+          <div className="inspection-viewport">
+            
+            {/* 1. Zoomed-in Bridge Structure */}
+            <div className="bridge-zoomed">
+              <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" className="bridge-svg">
                 <defs>
-                  <filter id="wg"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-                  <filter id="sg"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-                  <linearGradient id="waterG" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#0a1520" stopOpacity="0.6"/>
-                    <stop offset="100%" stopColor="#050a10" stopOpacity="0.3"/>
+                  <linearGradient id="concrete" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#1a1a1a"/>
+                    <stop offset="100%" stopColor="#0a0a0a"/>
                   </linearGradient>
+                  <linearGradient id="deckSide" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#222"/>
+                    <stop offset="10%" stopColor="#333"/>
+                    <stop offset="100%" stopColor="#111"/>
+                  </linearGradient>
+                  <linearGradient id="highlight" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="rgba(255,255,255,0.15)"/>
+                    <stop offset="100%" stopColor="transparent"/>
+                  </linearGradient>
+                  <filter id="orangeGlow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                  <filter id="intenseGlow"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                  
+                  {/* Hexagon Pattern for structural mesh */}
+                  <pattern id="hex" width="30" height="52" patternUnits="userSpaceOnUse" patternTransform="scale(0.5)">
+                    <path d="M15 0 L30 8.66 L30 25.98 L15 34.64 L0 25.98 L0 8.66 Z" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="1"/>
+                    <path d="M15 51.96 L30 43.3 L30 25.98 L15 34.64 L0 25.98 L0 43.3 Z" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="1"/>
+                  </pattern>
                 </defs>
 
-                {/* Perspective ground grid */}
-                <g opacity="0.12" stroke="#ff641f" strokeWidth="0.4">
-                  {Array.from({length: 16}, (_, i) => (
-                    <line key={`h${i}`} x1="0" y1={260 + i * 9} x2="700" y2={260 + i * 9}/>
-                  ))}
-                  {Array.from({length: 18}, (_, i) => {
-                    const x = (i - 9) * 45 + 350
-                    return <line key={`v${i}`} x1={350 + (x - 350) * 0.25} y1="260" x2={x} y2="400"/>
-                  })}
+                {/* Massive Pillar */}
+                <rect x="420" y="50" width="160" height="600" fill="url(#concrete)"/>
+                <rect x="420" y="50" width="160" height="600" fill="url(#hex)"/>
+                <rect x="420" y="50" width="10" height="600" fill="rgba(0,0,0,0.5)"/>
+                <rect x="570" y="50" width="10" height="600" fill="rgba(255,255,255,0.05)"/>
+                
+                {/* Pillar details */}
+                <line x1="460" y1="50" x2="460" y2="600" stroke="rgba(0,0,0,0.8)" strokeWidth="4"/>
+                <line x1="540" y1="50" x2="540" y2="600" stroke="rgba(0,0,0,0.8)" strokeWidth="4"/>
+                <rect x="410" y="240" width="180" height="40" fill="#151515"/>
+
+                {/* Cables coming down */}
+                <g stroke="#333" strokeWidth="4" opacity="0.8">
+                  <line x1="200" y1="-100" x2="100" y2="280"/>
+                  <line x1="300" y1="-100" x2="250" y2="280"/>
+                  <line x1="800" y1="-100" x2="900" y2="280"/>
+                  <line x1="700" y1="-100" x2="750" y2="280"/>
                 </g>
 
-                {/* Water surface */}
-                <rect x="0" y="280" width="700" height="120" fill="url(#waterG)"/>
-                <path d="M0 285 Q80 282,160 285 T320 285 T480 285 T640 285 L700 285" stroke="#1a3040" strokeWidth="0.4" fill="none" opacity="0.4">
-                  <animate attributeName="d" values="M0 285 Q80 282,160 285 T320 285 T480 285 T640 285 L700 285;M0 285 Q80 288,160 285 T320 285 T480 285 T640 285 L700 285;M0 285 Q80 282,160 285 T320 285 T480 285 T640 285 L700 285" dur="5s" repeatCount="indefinite"/>
-                </path>
+                {/* Deck (Perspective slant) */}
+                <path d="M-100,280 L1100,280 L1100,380 L-100,380 Z" fill="url(#deckSide)"/>
+                <path d="M-100,280 L1100,280 L1100,285 L-100,285 Z" fill="url(#highlight)"/>
+                <line x1="-100" y1="380" x2="1100" y2="380" stroke="#000" strokeWidth="6"/>
+                
+                {/* Under-deck ribs */}
+                {Array.from({length: 24}, (_, i) => (
+                  <rect key={i} x={i * 50 - 50} y="380" width="15" height="25" fill="#0a0a0a" stroke="#000" strokeWidth="2"/>
+                ))}
 
-                {/* ── Left Approach ── */}
-                <g filter="url(#wg)">
-                  <line x1="0" y1="242" x2="140" y2="235" stroke="#ff641f" strokeWidth="1" opacity="0.6"/>
-                  <line x1="0" y1="250" x2="145" y2="243" stroke="#ff641f" strokeWidth="0.7" opacity="0.4"/>
-                  {Array.from({length: 5}, (_, i) => (
-                    <line key={`la${i}`} x1={20 + i * 28} y1="242" x2={22 + i * 28} y2="250" stroke="#ff641f" strokeWidth="0.3" opacity="0.3"/>
-                  ))}
-                </g>
-
-                {/* ── Right Approach ── */}
-                <g filter="url(#wg)">
-                  <line x1="560" y1="235" x2="700" y2="242" stroke="#ff641f" strokeWidth="1" opacity="0.6"/>
-                  <line x1="555" y1="243" x2="700" y2="250" stroke="#ff641f" strokeWidth="0.7" opacity="0.4"/>
-                  {Array.from({length: 5}, (_, i) => (
-                    <line key={`ra${i}`} x1={570 + i * 28} y1="235" x2={572 + i * 28} y2="243" stroke="#ff641f" strokeWidth="0.3" opacity="0.3"/>
-                  ))}
-                </g>
-
-                {/* ── Main Deck (3D depth) ── */}
-                <g filter="url(#wg)">
-                  {/* Top edge */}
-                  <line x1="100" y1="233" x2="600" y2="233" stroke="#ff641f" strokeWidth="1.4" opacity="0.85"/>
-                  {/* Bottom edge (perspective depth) */}
-                  <line x1="105" y1="243" x2="595" y2="243" stroke="#ff641f" strokeWidth="0.9" opacity="0.5"/>
-                  {/* Near edge */}
-                  <line x1="100" y1="233" x2="105" y2="243" stroke="#ff641f" strokeWidth="0.7" opacity="0.5"/>
-                  <line x1="600" y1="233" x2="595" y2="243" stroke="#ff641f" strokeWidth="0.7" opacity="0.5"/>
-                  {/* Deck cross-beams / ribs */}
-                  {Array.from({length: 26}, (_, i) => {
-                    const x = 115 + i * 19
-                    return <line key={`dr${i}`} x1={x} y1="233" x2={x + 0.5} y2="243" stroke="#ff641f" strokeWidth="0.3" opacity="0.25"/>
-                  })}
-                  {/* Road center line */}
-                  {Array.from({length: 20}, (_, i) => (
-                    <rect key={`cl${i}`} x={120 + i * 25} y="237" width="12" height="1" fill="#ff641f" opacity="0.2" rx="0.5"/>
-                  ))}
-                  {/* Railings */}
-                  <line x1="100" y1="231" x2="600" y2="231" stroke="#ff641f" strokeWidth="0.5" opacity="0.4"/>
-                  <line x1="100" y1="245" x2="600" y2="245" stroke="#ff641f" strokeWidth="0.4" opacity="0.3"/>
-                  {/* Railing posts */}
-                  {Array.from({length: 35}, (_, i) => (
-                    <line key={`rp${i}`} x1={110 + i * 14} y1="231" x2={110 + i * 14} y2="233" stroke="#ff641f" strokeWidth="0.3" opacity="0.3"/>
-                  ))}
-                </g>
-
-                {/* ── Left Tower (A-frame shape) ── */}
-                <g filter="url(#wg)">
-                  {/* Tower legs */}
-                  <line x1="225" y1="233" x2="235" y2="70" stroke="#ff641f" strokeWidth="2" opacity="0.95"/>
-                  <line x1="255" y1="233" x2="245" y2="70" stroke="#ff641f" strokeWidth="2" opacity="0.95"/>
-                  {/* Tower cap beam */}
-                  <line x1="235" y1="70" x2="245" y2="70" stroke="#ff641f" strokeWidth="1.5" opacity="0.9"/>
-                  {/* Tower finial */}
-                  <line x1="239" y1="70" x2="240" y2="52" stroke="#ff641f" strokeWidth="1.2" opacity="0.8"/>
-                  {/* Cross-bracing */}
-                  <line x1="228" y1="110" x2="252" y2="110" stroke="#ff641f" strokeWidth="0.8" opacity="0.6"/>
-                  <line x1="227" y1="145" x2="253" y2="145" stroke="#ff641f" strokeWidth="0.8" opacity="0.6"/>
-                  <line x1="226" y1="175" x2="254" y2="175" stroke="#ff641f" strokeWidth="0.8" opacity="0.6"/>
-                  <line x1="225" y1="205" x2="255" y2="205" stroke="#ff641f" strokeWidth="0.8" opacity="0.6"/>
-                  {/* X-braces between horizontals */}
-                  <line x1="228" y1="110" x2="253" y2="145" stroke="#ff641f" strokeWidth="0.3" opacity="0.2"/>
-                  <line x1="252" y1="110" x2="227" y2="145" stroke="#ff641f" strokeWidth="0.3" opacity="0.2"/>
-                  <line x1="227" y1="145" x2="254" y2="175" stroke="#ff641f" strokeWidth="0.3" opacity="0.2"/>
-                  <line x1="253" y1="145" x2="226" y2="175" stroke="#ff641f" strokeWidth="0.3" opacity="0.2"/>
-                  {/* Pier below deck */}
-                  <line x1="235" y1="243" x2="235" y2="290" stroke="#ff641f" strokeWidth="1.2" opacity="0.5"/>
-                  <line x1="245" y1="243" x2="245" y2="290" stroke="#ff641f" strokeWidth="1.2" opacity="0.5"/>
-                  <line x1="233" y1="290" x2="247" y2="290" stroke="#ff641f" strokeWidth="0.8" opacity="0.4"/>
-                  {/* Pier cross brace */}
-                  <line x1="235" y1="265" x2="245" y2="265" stroke="#ff641f" strokeWidth="0.5" opacity="0.3"/>
-                </g>
-
-                {/* ── Right Tower ── */}
-                <g filter="url(#wg)">
-                  <line x1="445" y1="233" x2="455" y2="70" stroke="#ff641f" strokeWidth="2" opacity="0.95"/>
-                  <line x1="475" y1="233" x2="465" y2="70" stroke="#ff641f" strokeWidth="2" opacity="0.95"/>
-                  <line x1="455" y1="70" x2="465" y2="70" stroke="#ff641f" strokeWidth="1.5" opacity="0.9"/>
-                  <line x1="459" y1="70" x2="460" y2="52" stroke="#ff641f" strokeWidth="1.2" opacity="0.8"/>
-                  <line x1="448" y1="110" x2="472" y2="110" stroke="#ff641f" strokeWidth="0.8" opacity="0.6"/>
-                  <line x1="447" y1="145" x2="473" y2="145" stroke="#ff641f" strokeWidth="0.8" opacity="0.6"/>
-                  <line x1="446" y1="175" x2="474" y2="175" stroke="#ff641f" strokeWidth="0.8" opacity="0.6"/>
-                  <line x1="445" y1="205" x2="475" y2="205" stroke="#ff641f" strokeWidth="0.8" opacity="0.6"/>
-                  <line x1="448" y1="110" x2="473" y2="145" stroke="#ff641f" strokeWidth="0.3" opacity="0.2"/>
-                  <line x1="472" y1="110" x2="447" y2="145" stroke="#ff641f" strokeWidth="0.3" opacity="0.2"/>
-                  <line x1="447" y1="145" x2="474" y2="175" stroke="#ff641f" strokeWidth="0.3" opacity="0.2"/>
-                  <line x1="473" y1="145" x2="446" y2="175" stroke="#ff641f" strokeWidth="0.3" opacity="0.2"/>
-                  <line x1="455" y1="243" x2="455" y2="290" stroke="#ff641f" strokeWidth="1.2" opacity="0.5"/>
-                  <line x1="465" y1="243" x2="465" y2="290" stroke="#ff641f" strokeWidth="1.2" opacity="0.5"/>
-                  <line x1="453" y1="290" x2="467" y2="290" stroke="#ff641f" strokeWidth="0.8" opacity="0.4"/>
-                  <line x1="455" y1="265" x2="465" y2="265" stroke="#ff641f" strokeWidth="0.5" opacity="0.3"/>
-                </g>
-
-                {/* ── Left Tower Cables (fan pattern) ── */}
-                <g opacity="0.5" stroke="#ff641f" strokeWidth="0.5" filter="url(#wg)">
-                  {/* Back-span cables */}
-                  <line x1="240" y1="55" x2="115" y2="233"/>
-                  <line x1="240" y1="62" x2="135" y2="233"/>
-                  <line x1="240" y1="70" x2="155" y2="233"/>
-                  <line x1="240" y1="80" x2="175" y2="233"/>
-                  <line x1="240" y1="92" x2="195" y2="233"/>
-                  <line x1="240" y1="105" x2="210" y2="233"/>
-                  {/* Main-span cables */}
-                  <line x1="240" y1="55" x2="340" y2="233"/>
-                  <line x1="240" y1="62" x2="325" y2="233"/>
-                  <line x1="240" y1="70" x2="310" y2="233"/>
-                  <line x1="240" y1="80" x2="295" y2="233"/>
-                  <line x1="240" y1="92" x2="280" y2="233"/>
-                  <line x1="240" y1="105" x2="265" y2="233"/>
-                </g>
-
-                {/* ── Right Tower Cables ── */}
-                <g opacity="0.5" stroke="#ff641f" strokeWidth="0.5" filter="url(#wg)">
-                  <line x1="460" y1="55" x2="585" y2="233"/>
-                  <line x1="460" y1="62" x2="565" y2="233"/>
-                  <line x1="460" y1="70" x2="545" y2="233"/>
-                  <line x1="460" y1="80" x2="525" y2="233"/>
-                  <line x1="460" y1="92" x2="505" y2="233"/>
-                  <line x1="460" y1="105" x2="490" y2="233"/>
-                  <line x1="460" y1="55" x2="360" y2="233"/>
-                  <line x1="460" y1="62" x2="375" y2="233"/>
-                  <line x1="460" y1="70" x2="390" y2="233"/>
-                  <line x1="460" y1="80" x2="405" y2="233"/>
-                  <line x1="460" y1="92" x2="420" y2="233"/>
-                  <line x1="460" y1="105" x2="435" y2="233"/>
-                </g>
-
-                {/* Pier reflections in water */}
-                <g opacity="0.08">
-                  <rect x="234" y="290" width="12" height="40" fill="#ff641f"/>
-                  <rect x="454" y="290" width="12" height="40" fill="#ff641f"/>
-                </g>
-
-                {/* Structural depth shadow under deck */}
-                <line x1="105" y1="247" x2="595" y2="247" stroke="#ff641f" strokeWidth="0.3" opacity="0.15"/>
-              </svg>
-            </div>
-
-            {/* ═══ Drone ═══ */}
-            <div className="inspect-drone">
-              <svg viewBox="0 0 100 70" fill="none" className="drone-3d-svg">
-                <defs>
-                  <filter id="dGlow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-                </defs>
-                <line x1="40" y1="30" x2="15" y2="18" stroke="#888" strokeWidth="2.5" strokeLinecap="round"/>
-                <line x1="60" y1="30" x2="85" y2="18" stroke="#888" strokeWidth="2.5" strokeLinecap="round"/>
-                <line x1="42" y1="34" x2="20" y2="42" stroke="#888" strokeWidth="2.5" strokeLinecap="round"/>
-                <line x1="58" y1="34" x2="80" y2="42" stroke="#888" strokeWidth="2.5" strokeLinecap="round"/>
-                <ellipse cx="15" cy="18" rx="12" ry="3" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5">
-                  <animateTransform attributeName="transform" type="rotate" from="0 15 18" to="360 15 18" dur="0.1s" repeatCount="indefinite"/>
-                </ellipse>
-                <ellipse cx="85" cy="18" rx="12" ry="3" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5">
-                  <animateTransform attributeName="transform" type="rotate" from="0 85 18" to="-360 85 18" dur="0.08s" repeatCount="indefinite"/>
-                </ellipse>
-                <ellipse cx="20" cy="42" rx="10" ry="2.5" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.18)" strokeWidth="0.5">
-                  <animateTransform attributeName="transform" type="rotate" from="0 20 42" to="360 20 42" dur="0.09s" repeatCount="indefinite"/>
-                </ellipse>
-                <ellipse cx="80" cy="42" rx="10" ry="2.5" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.18)" strokeWidth="0.5">
-                  <animateTransform attributeName="transform" type="rotate" from="0 80 42" to="-360 80 42" dur="0.11s" repeatCount="indefinite"/>
-                </ellipse>
-                <circle cx="15" cy="18" r="3.5" fill="#555" stroke="#777" strokeWidth="0.5"/>
-                <circle cx="85" cy="18" r="3.5" fill="#555" stroke="#777" strokeWidth="0.5"/>
-                <circle cx="20" cy="42" r="3" fill="#555" stroke="#777" strokeWidth="0.5"/>
-                <circle cx="80" cy="42" r="3" fill="#555" stroke="#777" strokeWidth="0.5"/>
-                <rect x="35" y="26" width="30" height="16" rx="5" fill="#444" stroke="#888" strokeWidth="0.8"/>
-                <rect x="43" y="42" width="14" height="7" rx="3" fill="#333" stroke="#666" strokeWidth="0.5"/>
-                <circle cx="50" cy="45.5" r="2" fill="#111" stroke="#ff641f" strokeWidth="0.8"/>
-                <circle cx="50" cy="45.5" r="0.8" fill="#ff641f" filter="url(#dGlow)">
-                  <animate attributeName="opacity" values="1;0.3;1" dur="0.8s" repeatCount="indefinite"/>
-                </circle>
-                <circle cx="50" cy="29" r="1.2" fill="#ff641f" filter="url(#dGlow)">
-                  <animate attributeName="opacity" values="1;0.2;1" dur="1.2s" repeatCount="indefinite"/>
-                </circle>
-                <line x1="38" y1="49" x2="32" y2="53" stroke="#777" strokeWidth="1.2" strokeLinecap="round"/>
-                <line x1="62" y1="49" x2="68" y2="53" stroke="#777" strokeWidth="1.2" strokeLinecap="round"/>
-                <line x1="29" y1="53" x2="38" y2="53" stroke="#999" strokeWidth="1.5" strokeLinecap="round"/>
-                <line x1="62" y1="53" x2="71" y2="53" stroke="#999" strokeWidth="1.5" strokeLinecap="round"/>
-              </svg>
-              <div className="drone-label mono">● AUTONOMOUS INSPECTION DRONE</div>
-              <div className="drone-beam" />
-              <div className="drone-beam-ground" />
-            </div>
-
-            {/* ═══ Animated Live Inspection Feed Panel ═══ */}
-            <div className={`data-panel panel-feed ${scanActive ? 'panel-active' : ''}`}>
-              <div className="data-panel-header mono">
-                <span className="feed-dot" />
-                LIVE INSPECTION FEED
-              </div>
-
-              {/* Dot matrix with scanning line */}
-              <div className="dot-matrix-wrap">
-                <div className="dot-matrix">
-                  {Array.from({length: 12 * 16}, (_, i) => {
-                    const row = Math.floor(i / 16)
-                    const col = i % 16
-                    const isHighlight = (row >= 3 && row <= 5 && col >= 2 && col <= 6) ||
-                                       (row >= 4 && row <= 7 && col >= 10 && col <= 14)
+                {/* ── Dynamic Cracks (Glow based on drone proximity) ── */}
+                <g filter="url(#orangeGlow)">
+                  {DEFECTS.map(d => {
+                    const distance = Math.abs(d.x - scanPos)
+                    const intensity = Math.max(0, 1 - distance / 12) // Glow intensity fades as drone moves away
+                    
                     return (
-                      <div key={i}
-                        className={`dot-cell ${isHighlight ? 'dot-hot' : ''}`}
-                        style={{ animationDelay: `${row * 0.06 + col * 0.04}s` }}
-                      />
+                      <g key={d.id} style={{ opacity: 0.1 + intensity * 0.9 }}>
+                        {d.id === 'D-01' && (
+                          <path d="M260,300 L275,320 L265,340 L285,360 L280,375" fill="none" stroke="var(--orange)" strokeWidth="2"/>
+                        )}
+                        {d.id === 'D-02' && (
+                          <>
+                            <circle cx="500" cy="330" r="15" fill="none" stroke="var(--orange)" strokeWidth="1.5" strokeDasharray="4 2"/>
+                            <path d="M490,320 L510,340 M510,320 L490,340" stroke="var(--orange)" strokeWidth="2"/>
+                          </>
+                        )}
+                        {d.id === 'D-03' && (
+                          <path d="M740,280 L760,310 L745,330 L770,350 L755,380" fill="none" stroke="var(--orange)" strokeWidth="2.5"/>
+                        )}
+                        {/* Glow nodes on the defect */}
+                        {intensity > 0.5 && (
+                          <circle cx={d.x * 10} cy={330} r={intensity * 8} fill="var(--orange)" filter="url(#intenseGlow)" opacity={intensity}/>
+                        )}
+                      </g>
                     )
                   })}
-                </div>
-                {/* Scanning line inside dot matrix */}
-                <div className="feed-scan-line" />
+                </g>
 
-                {/* Detection boxes that pulse */}
-                <div className={`feed-box fb1 ${detectPhase >= 1 ? 'fb-visible' : ''}`}>
-                  <span className="fb-label mono">D-01</span>
-                </div>
-                <div className={`feed-box fb2 ${detectPhase >= 2 ? 'fb-visible' : ''}`}>
-                  <span className="fb-label mono">D-02</span>
-                </div>
-              </div>
+                {/* Scanning grid overlay on bridge that follows the drone */}
+                <g stroke="var(--orange)" strokeWidth="0.5" opacity="0.15">
+                  {Array.from({length: 8}, (_, i) => (
+                    <line key={`h${i}`} x1={scanPos * 10 - 150} y1={280 + i * 14} x2={scanPos * 10 + 150} y2={280 + i * 14}/>
+                  ))}
+                  {Array.from({length: 12}, (_, i) => (
+                    <line key={`v${i}`} x1={scanPos * 10 - 150 + i * 27} y1="280" x2={scanPos * 10 - 150 + i * 27} y2="380"/>
+                  ))}
+                </g>
+              </svg>
+            </div>
 
-              {/* Detection readout */}
-              <div className={`feed-detect ${detectPhase >= 1 ? 'detect-visible' : ''}`}>
-                <div className="detect-type">
-                  <span className="detect-icon">⬡</span>
-                  <span className="orange" style={{fontWeight: 700, fontSize: 12}}>CORROSION DETECTED</span>
-                </div>
-                <div className="detect-bar">
-                  <div className="detect-fill" key={detectPhase} />
-                </div>
-                <div className="detect-meta mono">
-                  <span>CONFIDENCE</span>
-                  <span className="orange">96.7%</span>
-                </div>
-              </div>
+            {/* 2. Synced Drone & Beam */}
+            <div className="synced-drone-group" style={{ left: `${scanPos}%` }}>
+              <div className="drone-hover-wrapper">
+                {/* Light Beam (Cone) */}
+                <div className="scanner-beam" />
+                <div className="scanner-beam-impact" />
 
-              {/* Mini stats */}
-              <div className="feed-stats mono">
-                <div><b className="orange">03</b><span>DEFECTS</span></div>
-                <div><b>mm</b><span>SCALE</span></div>
-                <div><b>95%</b><span>mIoU</span></div>
+                {/* The Drone */}
+                <div className="drone-body">
+                  <svg viewBox="0 0 120 80" className="drone-svg-new">
+                    <defs>
+                      <filter id="dGlow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                    </defs>
+                    
+                    {/* Props */}
+                    <ellipse cx="20" cy="20" rx="18" ry="4" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" strokeWidth="1">
+                      <animateTransform attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur="0.1s" repeatCount="indefinite"/>
+                    </ellipse>
+                    <ellipse cx="100" cy="20" rx="18" ry="4" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" strokeWidth="1">
+                      <animateTransform attributeName="transform" type="rotate" from="0 100 20" to="-360 100 20" dur="0.12s" repeatCount="indefinite"/>
+                    </ellipse>
+                    
+                    {/* Arms */}
+                    <line x1="60" y1="40" x2="20" y2="25" stroke="#777" strokeWidth="3" strokeLinecap="round"/>
+                    <line x1="60" y1="40" x2="100" y2="25" stroke="#777" strokeWidth="3" strokeLinecap="round"/>
+                    
+                    {/* Chassis */}
+                    <rect x="40" y="30" width="40" height="20" rx="6" fill="#222" stroke="#555" strokeWidth="1"/>
+                    <path d="M45 50 L50 65 L70 65 L75 50" fill="none" stroke="#777" strokeWidth="2" strokeLinecap="round"/>
+                    
+                    {/* Camera Gimbal */}
+                    <circle cx="60" cy="55" r="8" fill="#111" stroke="#444" strokeWidth="1"/>
+                    <circle cx="60" cy="55" r="3" fill="#000" stroke="var(--orange)" strokeWidth="1.5"/>
+                    <circle cx="60" cy="55" r="1.5" fill="var(--orange)" filter="url(#dGlow)">
+                      <animate attributeName="opacity" values="1;0.5;1" dur="1s" repeatCount="indefinite"/>
+                    </circle>
+                    
+                    {/* Drone Status Lights */}
+                    <circle cx="45" cy="35" r="1.5" fill="#ff2222" filter="url(#dGlow)">
+                      <animate attributeName="opacity" values="1;0;1" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="75" cy="35" r="1.5" fill="#22ff22" filter="url(#dGlow)">
+                      <animate attributeName="opacity" values="1;0.5;1" dur="0.5s" repeatCount="indefinite"/>
+                    </circle>
+                  </svg>
+                  <div className="drone-tag mono">
+                    DRONE-01
+                    <span className="drone-tag-line" />
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Particles */}
+            {/* 3. Live HUD Feed */}
+            <div className="hud-panel">
+              <div className="hud-header mono">
+                <div className="hud-recording-dot" /> LIVE INTELLIGENCE FEED
+              </div>
+              
+              <div className="hud-content">
+                {/* Visualizer matching scan position */}
+                <div className="hud-visualizer">
+                  <div className="hud-vis-track">
+                    {/* Tick marks */}
+                    {Array.from({length: 20}, (_, i) => (
+                      <div key={i} className="hud-tick" />
+                    ))}
+                    {/* Moving cursor on HUD */}
+                    <div className="hud-cursor" style={{ left: `${scanPos}%` }} />
+                    
+                    {/* Defect markers on HUD track */}
+                    {DEFECTS.map(d => (
+                      <div key={d.id} className={`hud-marker ${activeDefect?.id === d.id ? 'active' : ''}`} style={{ left: `${d.x}%` }}>
+                        <span>{d.id}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Active Analysis Readout */}
+                <div className="hud-analysis">
+                  {activeDefect ? (
+                    <div className="hud-alert">
+                      <div className="hud-alert-title orange mono">
+                        ⚠ {activeDefect.type} DETECTED
+                      </div>
+                      <div className="hud-alert-details mono">
+                        <div><span>ID</span> <b>{activeDefect.id}</b></div>
+                        <div><span>DEPTH</span> <b>{activeDefect.depth}</b></div>
+                        <div><span>CONFIDENCE</span> <b className="orange">{activeDefect.conf}%</b></div>
+                      </div>
+                      <div className="hud-bar-container">
+                        <div className="hud-bar-fill" style={{ width: `${activeDefect.conf}%` }} />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="hud-scanning mono">
+                      <div className="hud-scanning-text">SCANNING SURFACE...</div>
+                      <div className="hud-scanning-wave">
+                        {Array.from({length: 15}, (_, i) => (
+                          <div key={i} className="wave-bar" style={{ animationDelay: `${i * 0.1}s` }} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Floating ambient particles */}
             {particles.map(p => (
-              <div key={p.id} className="scene-particle" style={{
-                left: p.left, top: p.top,
-                animationDelay: p.delay, animationDuration: p.dur,
+              <div key={p.id} className="ambient-particle" style={{
+                left: `${p.x}%`, top: `${p.y}%`,
                 width: p.size, height: p.size,
+                animationDelay: `${p.delay}s`, animationDuration: `${p.dur}s`
               }}/>
             ))}
           </div>
         </div>
       </div>
+      
       <div className="scroll-note mono">SCROLL TO INSPECT ↓</div>
     </section>
   )
