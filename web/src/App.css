@@ -306,3 +306,38 @@ footer { border-top: 1px solid var(--line); padding: 28px 0; color: #666; font-s
   .console-screen { height: 300px; }
   .footer-inner { flex-direction: column; }
 }
+/* --- Authentication Font Fixes --- */
+.signin-page {
+  /* Inherit the global font set in your index.css/App.css */
+  font-family: inherit; 
+}
+.signin-card {
+  /* ... keep your existing styles (padding, width, background, etc.) ... */
+
+  /* Adds a very subtle crisp edge to the box */
+  border: 1px solid rgba(255, 100, 31, 0.08);
+
+  /* Creates the soft, blended orange gradient outside the box */
+  box-shadow: 
+    0 0 80px -15px rgba(255, 100, 31, 0.2), 
+    0 0 30px -5px rgba(255, 100, 31, 0.1);
+}
+.signup-card {
+  /* ... keep your existing styles (padding, width, background, etc.) ... */
+
+  /* Adds a very subtle crisp edge to the box */
+  border: 1px solid rgba(255, 100, 31, 0.08);
+
+  /* Creates the soft, blended orange gradient outside the box */
+  box-shadow: 
+    0 0 80px -15px rgba(255, 100, 31, 0.2), 
+    0 0 30px -5px rgba(255, 100, 31, 0.1);
+}
+
+.signin-form input, 
+.signin-form button,
+.social-btn {
+  /* Forces all form elements to use your beautiful landing page font */
+  font-family: inherit; 
+  letter-spacing: inherit;
+}

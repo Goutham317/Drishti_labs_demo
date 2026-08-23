@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef } from 'react'
 import './App.css'
 
 import Navbar from './components/Navbar'
@@ -16,14 +16,6 @@ import Dashboard from './components/Dashboard' // <-- Ensure this file exists!
 
 function App() {
   const orbRef = useRef(null)
-
-  // ── Orb Cursor Follower ──
-  const handlePointerMove = useCallback((e) => {
-    if (orbRef.current) {
-      orbRef.current.style.left = e.clientX + 'px'
-      orbRef.current.style.top = e.clientY + 'px'
-    }
-  }, [])
 
   // ── Intersection Observer for Reveal Animations ──
   useEffect(() => {
@@ -54,12 +46,6 @@ function App() {
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-
-  // ── Pointer move listener ──
-  useEffect(() => {
-    window.addEventListener('pointermove', handlePointerMove)
-    return () => window.removeEventListener('pointermove', handlePointerMove)
-  }, [handlePointerMove])
 
   // ── Routing Logic ──
   const isSignIn = window.location.pathname === '/signin';
