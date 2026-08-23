@@ -6,7 +6,7 @@ export default function IntelligenceSection() {
     <section>
       <div className="container interactive">
         <div className="reveal">
-          <div className="section-kicker mono">04 / INTELLIGENCE LAYER</div>
+          {/* <div className="section-kicker mono">04 / INTELLIGENCE LAYER</div> */}
           <h2 className="section-title">
             See the defect.
             <br />

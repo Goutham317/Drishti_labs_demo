@@ -55,7 +55,7 @@ export default function HeroSection() {
 
       <div className="container hero-grid">
         <div className="hero-content reveal">
-          <div className="eyebrow mono">NIRMAAN · IIT MADRAS / INTELLIGENCE</div>
+          {/* <div className="eyebrow mono">NIRMAAN · IIT MADRAS / INTELLIGENCE</div> */}
           <h1>An MRI for ageing <span className="orange">infrastructure.</span></h1>
           <p className="hero-copy">
             We measure what the industry estimates. Drishti Labs turns inspection into quantified,

@@ -14,7 +14,7 @@ export default function SolutionSection() {
     <section id="solution">
       <div className="container solution">
         <div className="reveal">
-          <div className="section-kicker mono">02 / THE SOLUTION</div>
+          {/* <div className="section-kicker mono">02 / THE SOLUTION</div> */}
           <h2 className="section-title">
             We measure what others{' '}
             <span className="orange">estimate.</span>
