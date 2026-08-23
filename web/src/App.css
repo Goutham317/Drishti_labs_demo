@@ -333,3 +333,27 @@ section { padding: 130px 0; position: relative; }
   .footer-grid { grid-template-columns: 1fr; gap: 30px; }
   .footer-bottom { flex-direction: column; gap: 10px; }
 }
+
+.signin-card {
+  /* ... keep your existing styles (padding, width, background, etc.) ... */
+
+  /* Adds a very subtle crisp edge to the box */
+  border: 1px solid rgba(255, 100, 31, 0.08);
+
+  /* Creates the soft, blended orange gradient outside the box */
+  box-shadow: 
+    0 0 80px -15px rgba(255, 100, 31, 0.2), 
+    0 0 30px -5px rgba(255, 100, 31, 0.1);
+}
+
+.signup-card {
+  /* ... keep your existing styles (padding, width, background, etc.) ... */
+
+  /* Adds a very subtle crisp edge to the box */
+  border: 1px solid rgba(255, 100, 31, 0.08);
+
+  /* Creates the soft, blended orange gradient outside the box */
+  box-shadow: 
+    0 0 80px -15px rgba(255, 100, 31, 0.2), 
+    0 0 30px -5px rgba(255, 100, 31, 0.1);
+}
