@@ -10,6 +10,9 @@ import IntelligenceSection from './components/IntelligenceSection'
 import TeamSection from './components/TeamSection'
 import CTASection from './components/CTASection'
 import Footer from './components/Footer'
+import SignIn from './components/SignIn' 
+import SignUp from './components/SignUp'
+import Dashboard from './components/Dashboard' // <-- Ensure this file exists!
 
 function App() {
   const orbRef = useRef(null)
@@ -58,6 +61,42 @@ function App() {
     return () => window.removeEventListener('pointermove', handlePointerMove)
   }, [handlePointerMove])
 
+  // ── Routing Logic ──
+  const isSignIn = window.location.pathname === '/signin';
+  const isSignUp = window.location.pathname === '/signup';
+  const isDashboard = window.location.pathname === '/dashboard';
+
+  // 1. Check for Dashboard First
+  if (isDashboard) {
+    return (
+      <>
+        <div className="orb" ref={orbRef}></div>
+        <Dashboard />
+      </>
+    )
+  }
+
+  // 2. Check for Sign In
+  if (isSignIn) {
+    return (
+      <>
+        <div className="orb" ref={orbRef}></div>
+        <SignIn />
+      </>
+    )
+  }
+
+  // 3. Check for Sign Up
+  if (isSignUp) {
+    return (
+      <>
+        <div className="orb" ref={orbRef}></div>
+        <SignUp />
+      </>
+    )
+  }
+
+  // ── Main Landing Page Render ──
   return (
     <>
       {/* Cursor orb */}

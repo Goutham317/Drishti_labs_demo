@@ -40,11 +40,12 @@ export default function HeroSection() {
   const particles = useMemo(() =>
     Array.from({ length: 30 }, (_, i) => ({
       id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      size: 0.5 + Math.random() * 2,
-      delay: Math.random() * -5,
-      dur: 3 + Math.random() * 4,
+      // Deterministic values keep particle generation pure during render.
+      x: (i * 37.17) % 100,
+      y: (i * 61.93) % 100,
+      size: 0.5 + ((i * 17.29) % 2),
+      delay: -((i * 1.83) % 5),
+      dur: 3 + ((i * 2.47) % 4),
     })), [])
 
   return (

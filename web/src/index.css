@@ -56,3 +56,32 @@ a {
 #root {
   min-height: 100vh;
 }
+/* Sign In Page Styles */
+.signin-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #050a10;
+}
+.signin-card {
+  background: #11151c;
+  padding: 40px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #1a1f26;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.signin-logo { height: 40px; margin-bottom: 20px; }
+.back-link { display: block; margin-bottom: 20px; color: #ff641f; text-decoration: none; font-size: 12px; }
+.input-group { margin-bottom: 15px; text-align: left; }
+.input-group label { display: block; margin-bottom: 5px; color: #ccc; font-size: 14px; }
+.input-group input { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #333; background: #0a0c10; color: white; }
+.forgot-password { text-align: right; margin-bottom: 20px; }
+.forgot-password a { color: #ff641f; font-size: 13px; text-decoration: none; }
+.full-width { width: 100%; display: flex; justify-content: center; align-items: center; }
+.divider { margin: 25px 0; text-align: center; border-bottom: 1px solid #333; line-height: 0.1em; }
+.divider span { background: #11151c; padding: 0 10px; color: #666; font-size: 12px; }
+.social-btn { display: flex; align-items: center; gap: 10px; background: #fff !important; color: #000 !important; }
+.social-icon { height: 18px; width: 18px; }
