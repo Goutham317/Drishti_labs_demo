@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useCallback } from 'react'
 import './App.css'
 
 import Navbar from './components/Navbar'
@@ -12,8 +12,19 @@ import CTASection from './components/CTASection'
 import Footer from './components/Footer'
 import SignIn from './components/SignIn' 
 import SignUp from './components/SignUp'
+import Dashboard from './components/Dashboard' // <-- Ensure this file exists!
 
 function App() {
+  const orbRef = useRef(null)
+
+  // ── Orb Cursor Follower ──
+  const handlePointerMove = useCallback((e) => {
+    if (orbRef.current) {
+      orbRef.current.style.left = e.clientX + 'px'
+      orbRef.current.style.top = e.clientY + 'px'
+    }
+  }, [])
+
   // ── Intersection Observer for Reveal Animations ──
   useEffect(() => {
     const reveals = document.querySelectorAll('.reveal')
@@ -44,21 +55,53 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // ── Pointer move listener ──
+  useEffect(() => {
+    window.addEventListener('pointermove', handlePointerMove)
+    return () => window.removeEventListener('pointermove', handlePointerMove)
+  }, [handlePointerMove])
+
   // ── Routing Logic ──
   const isSignIn = window.location.pathname === '/signin';
   const isSignUp = window.location.pathname === '/signup';
+  const isDashboard = window.location.pathname === '/dashboard';
 
-  if (isSignIn) {
-    return <SignIn />
+  // 1. Check for Dashboard First
+  if (isDashboard) {
+    return (
+      <>
+        <div className="orb" ref={orbRef}></div>
+        <Dashboard />
+      </>
+    )
   }
 
+  // 2. Check for Sign In
+  if (isSignIn) {
+    return (
+      <>
+        <div className="orb" ref={orbRef}></div>
+        <SignIn />
+      </>
+    )
+  }
+
+  // 3. Check for Sign Up
   if (isSignUp) {
-    return <SignUp />
+    return (
+      <>
+        <div className="orb" ref={orbRef}></div>
+        <SignUp />
+      </>
+    )
   }
 
   // ── Main Landing Page Render ──
   return (
     <>
+      {/* Cursor orb */}
+      <div className="orb" ref={orbRef}></div>
+
       {/* Navigation */}
       <Navbar />
 
