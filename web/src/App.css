@@ -66,217 +66,135 @@ h1 span { display: block; }
 @keyframes atmosRing { 0% { opacity: .3; transform: scale(.9); } 100% { opacity: .7; transform: scale(1.1); } }
 @keyframes atmosFlare { 0% { opacity: .4; } 100% { opacity: .8; } }
 
-/* ── Hero Visual — no box, open scene ───────────────────────── */
-.hero-visual {
-  position: relative; min-height: 560px; display: flex; align-items: center; justify-content: center;
-  overflow: visible; /* let content bleed */
+/* ── Zoomed Hero Visual ───────────────────────── */
+.hero-visual-container {
+  position: relative; height: 560px; width: 100%; border-radius: 16px;
+  overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+  border: 1px solid rgba(255,100,31,0.15); background: #050505;
 }
 
-.inspect-scene {
-  position: relative; width: 100%; height: 560px;
-  perspective: 1200px; overflow: visible;
+.inspection-viewport {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
 }
 
-/* ── 3D Wireframe Bridge ────────────────────────────────────── */
-.inspect-bridge {
-  position: absolute; left: -10%; right: -5%; bottom: 10%; top: 15%;
-  transform: rotateX(8deg) rotateY(-3deg);
-  transform-style: preserve-3d;
-  z-index: 2;
+.bridge-zoomed {
+  position: absolute; inset: -5%; width: 110%; height: 110%;
+  pointer-events: none; z-index: 1;
 }
-.bridge-3d-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 20px rgba(255,100,31,.15)); }
+.bridge-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 20px rgba(255,100,31,0.05)); }
 
-/* ── Scan Sweep ─────────────────────────────────────────────── */
-.inspect-sweep {
-  position: absolute; left: -15%; right: -10%; height: 3px; z-index: 3;
-  background: linear-gradient(90deg, transparent 5%, rgba(255,100,31,.7) 30%, var(--orange) 50%, rgba(255,100,31,.7) 70%, transparent 95%);
-  box-shadow: 0 0 30px rgba(255,100,31,.5), 0 0 80px rgba(255,100,31,.2);
-  animation: sweepScan 4s ease-in-out infinite;
-}
-.inspect-sweep::after {
-  content: ""; position: absolute; left: 10%; right: 10%; top: 0; height: 60px;
-  background: linear-gradient(to bottom, rgba(255,100,31,.12), transparent);
-  pointer-events: none;
-}
-@keyframes sweepScan { 0%, 100% { top: 8%; opacity: .3; } 50% { top: 75%; opacity: 1; } }
-
-/* ── Drone ──────────────────────────────────────────────────── */
-.inspect-drone {
-  position: absolute; z-index: 10;
-  animation: droneMove 10s ease-in-out infinite;
-  filter: drop-shadow(0 0 12px rgba(255,100,31,.3));
-}
-.drone-3d-svg { width: 70px; height: 50px; }
-.drone-label {
-  position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
-  white-space: nowrap; font-size: 8px; color: var(--orange2); opacity: .85;
+/* Synced Drone & Beam */
+.synced-drone-group {
+  position: absolute; top: 120px; z-index: 10;
+  transform: translateX(-50%); /* Center on scanPos */
+  display: flex; flex-direction: column; align-items: center;
+  transition: left 0.1s linear; /* Smooth X movement */
 }
 
-@keyframes droneMove {
-  0%   { left: 10%; top: 5%;  }
-  20%  { left: 30%; top: 10%; }
-  40%  { left: 50%; top: 3%;  }
-  60%  { left: 65%; top: 12%; }
-  80%  { left: 45%; top: 6%;  }
-  100% { left: 10%; top: 5%;  }
+.drone-hover-wrapper {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center;
+  animation: droneHover 4s ease-in-out infinite alternate;
 }
 
-/* ── Drone beam — orange cone of light ──────────────────────── */
-.drone-beam {
-  position: absolute; top: 48px; left: 50%; transform: translateX(-50%);
-  width: 6px; height: 280px;
-  background: linear-gradient(to bottom,
-    rgba(255,100,31,.85),
-    rgba(255,100,31,.3) 25%,
-    rgba(255,120,50,.08) 60%,
-    transparent 100%
-  );
-  clip-path: polygon(30% 0, 70% 0, 100% 100%, 0% 100%);
-  width: 120px;
-  pointer-events: none;
-  animation: beamPulse 2s ease-in-out infinite alternate;
-  z-index: -1;
+.drone-body {
+  position: relative; z-index: 11;
 }
-@keyframes beamPulse { 0% { opacity: .5; } 100% { opacity: .9; } }
+.drone-svg-new { width: 120px; height: 80px; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.8)); }
+.drone-tag {
+  position: absolute; top: -15px; left: 100px; color: var(--orange2); font-size: 8px;
+  background: rgba(0,0,0,0.8); padding: 4px 8px; border: 1px solid var(--orange);
+}
+.drone-tag-line {
+  position: absolute; left: -20px; top: 50%; width: 20px; height: 1px; background: var(--orange);
+}
 
-.drone-beam-ground {
-  position: absolute; top: 320px; left: 50%; transform: translateX(-50%);
-  width: 140px; height: 40px;
-  background: radial-gradient(ellipse, rgba(255,100,31,.3), transparent 70%);
-  border-radius: 50%;
-  animation: groundGlow 2s ease-in-out infinite alternate;
+.scanner-beam {
+  position: absolute; top: 58px; left: 50%; transform: translateX(-50%);
+  width: 220px; height: 260px; z-index: 5;
+  background: linear-gradient(to bottom, rgba(255,100,31,0.6), rgba(255,100,31,0.1) 50%, transparent);
+  clip-path: polygon(48.5% 0, 51.5% 0, 100% 100%, 0% 100%);
 }
-@keyframes groundGlow { 0% { opacity: .4; transform: translateX(-50%) scale(.85); } 100% { opacity: .8; transform: translateX(-50%) scale(1.15); } }
+.scanner-beam-impact {
+  position: absolute; top: 300px; left: 50%; transform: translateX(-50%);
+  width: 240px; height: 24px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(255,100,31,0.5), transparent 70%);
+  z-index: 6;
+}
+@keyframes droneHover { 0% { transform: translateY(0); } 100% { transform: translateY(-15px); } }
 
-/* ── Data Panel — Floating inspection feed ──────────────────── */
-.data-panel {
-  position: absolute; z-index: 12; pointer-events: none;
-  background: rgba(8,8,8,.88); border: 1px solid rgba(255,100,31,.25);
-  border-radius: 12px; backdrop-filter: blur(12px);
-  box-shadow: 0 20px 60px rgba(0,0,0,.7), 0 0 50px rgba(255,100,31,.06);
-  opacity: 0; transform: translateY(20px) scale(0.96);
-  transition: opacity .8s ease, transform .8s ease;
+/* Live HUD Feed */
+.hud-panel {
+  position: absolute; right: 30px; bottom: 30px; z-index: 20;
+  width: 320px; background: rgba(5,5,5,0.85); border: 1px solid rgba(255,100,31,0.25);
+  border-radius: 8px; backdrop-filter: blur(12px); overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8);
 }
-.data-panel.panel-active {
-  opacity: 1; transform: translateY(0) scale(1);
-  animation: panelFloat 6s ease-in-out 0.8s infinite alternate;
+.hud-header {
+  background: rgba(255,100,31,0.1); padding: 12px 16px; border-bottom: 1px solid rgba(255,100,31,0.15);
+  display: flex; align-items: center; gap: 8px; font-size: 10px; color: var(--orange2);
 }
-.panel-feed {
-  right: -8%; top: 10%; width: 240px; padding: 16px;
+.hud-recording-dot {
+  width: 6px; height: 6px; background: #ff2222; border-radius: 50%;
+  animation: feedDotBlink 1s infinite;
 }
-.data-panel-header {
-  font-size: 9px; color: var(--orange2); margin-bottom: 14px;
-  display: flex; align-items: center; gap: 6px;
-}
-.feed-dot {
-  width: 5px; height: 5px; border-radius: 50%; background: var(--orange);
-  box-shadow: 0 0 8px var(--orange);
-  animation: feedDotBlink 1.5s ease-in-out infinite;
-  display: inline-block;
-}
-@keyframes feedDotBlink { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
-@keyframes panelFloat { 0% { transform: translateY(0); } 100% { transform: translateY(-10px); } }
 
-/* ── Dot Matrix with scan line ──────────────────────────────── */
-.dot-matrix-wrap {
-  position: relative; background: rgba(0,0,0,.5); border-radius: 8px;
-  padding: 10px; margin-bottom: 14px; overflow: hidden;
-  border: 1px solid rgba(255,100,31,.08);
-}
-.dot-matrix {
-  display: grid; grid-template-columns: repeat(16, 1fr); gap: 4px;
-  position: relative; z-index: 1;
-}
-.dot-cell {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: rgba(255,100,31,.12);
-  animation: dotPulse 3s ease-in-out infinite;
-  transition: background .3s;
-}
-.dot-hot {
-  background: rgba(255,100,31,.5) !important;
-  box-shadow: 0 0 4px rgba(255,100,31,.4);
-  animation: dotHotPulse 1.2s ease-in-out infinite !important;
-}
-.dot-cell:nth-child(3n) { animation-delay: .2s; }
-.dot-cell:nth-child(7n) { animation-delay: .5s; }
-@keyframes dotPulse { 0%,100% { opacity: .35; } 50% { opacity: .8; } }
-@keyframes dotHotPulse { 0%,100% { opacity: .6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.3); } }
+.hud-content { padding: 16px; }
 
-/* Scanning line inside feed */
-.feed-scan-line {
-  position: absolute; left: 0; right: 0; height: 2px; z-index: 2;
-  background: linear-gradient(90deg, transparent, var(--orange), transparent);
-  box-shadow: 0 0 12px rgba(255,100,31,.5);
-  animation: feedScan 2.5s ease-in-out infinite;
+/* Visualizer Track */
+.hud-visualizer { margin-bottom: 20px; }
+.hud-vis-track {
+  position: relative; height: 30px; background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 4px;
+  display: flex; justify-content: space-between; overflow: hidden;
 }
-@keyframes feedScan { 0%,100% { top: 8px; opacity: .2; } 50% { top: calc(100% - 8px); opacity: .9; } }
+.hud-tick { width: 1px; height: 100%; background: rgba(255,255,255,0.05); }
+.hud-cursor {
+  position: absolute; top: 0; bottom: 0; width: 2px; background: var(--orange);
+  box-shadow: 0 0 10px var(--orange); z-index: 2; transition: left 0.1s linear;
+}
+.hud-marker {
+  position: absolute; top: 50%; transform: translate(-50%, -50%); z-index: 1;
+  width: 8px; height: 8px; border: 1px solid var(--orange2); border-radius: 50%;
+  background: rgba(255,100,31,0.2); transition: 0.3s;
+}
+.hud-marker.active {
+  background: var(--orange); box-shadow: 0 0 10px var(--orange); transform: translate(-50%, -50%) scale(1.5);
+}
+.hud-marker span {
+  position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
+  font-size: 7px; color: #777; opacity: 0; transition: 0.3s;
+}
+.hud-marker.active span { opacity: 1; color: var(--orange2); }
 
-/* Detection boxes with reveal animation */
-.feed-box {
-  position: absolute; border: 1.5px solid var(--orange);
-  background: rgba(255,100,31,.05); z-index: 3;
-  box-shadow: 0 0 14px rgba(255,100,31,.15);
-  opacity: 0; transform: scale(0.7);
-  transition: opacity .5s ease, transform .5s ease;
-}
-.feed-box.fb-visible {
-  opacity: 1; transform: scale(1);
-  animation: boxPulse 2s ease-in-out infinite;
-}
-.fb1 { width: 52px; height: 36px; top: 28px; left: 22px; border-radius: 3px; }
-.fb2 { width: 40px; height: 30px; top: 38px; right: 25px; border-radius: 3px; }
-.fb-label {
-  position: absolute; top: -14px; left: 0; font-size: 7px;
-  color: var(--orange2); white-space: nowrap;
-}
-@keyframes boxPulse { 0%,100% { box-shadow: 0 0 10px rgba(255,100,31,.15); } 50% { box-shadow: 0 0 22px rgba(255,100,31,.35); } }
+/* Analysis Readout */
+.hud-analysis { height: 75px; }
+.hud-scanning { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; opacity: 0.6; }
+.hud-scanning-text { font-size: 10px; color: #888; margin-bottom: 12px; }
+.hud-scanning-wave { display: flex; gap: 4px; align-items: center; }
+.wave-bar { width: 3px; height: 12px; background: #666; animation: wave 1s ease-in-out infinite; }
+@keyframes wave { 0%, 100% { height: 4px; } 50% { height: 16px; background: var(--orange); } }
 
-/* Detection readout with entrance */
-.feed-detect {
-  padding-top: 10px; opacity: 0; transform: translateY(8px);
-  transition: opacity .6s ease .3s, transform .6s ease .3s;
-}
-.feed-detect.detect-visible { opacity: 1; transform: none; }
-.detect-type { display: flex; align-items: center; gap: 6px; }
-.detect-icon {
-  color: var(--orange); font-size: 14px;
-  animation: iconSpin 3s linear infinite;
-}
-@keyframes iconSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-.detect-bar {
-  width: 100%; height: 4px; background: rgba(255,255,255,.06);
-  border-radius: 2px; margin: 8px 0 6px; overflow: hidden;
-}
-.detect-fill {
-  width: 0; height: 100%; border-radius: 2px;
-  background: linear-gradient(90deg, var(--orange), var(--orange2));
-  animation: fillGrow 1.8s ease-out forwards;
-}
-@keyframes fillGrow { from { width: 0; } to { width: 96.7%; } }
-.detect-meta { display: flex; justify-content: space-between; font-size: 9px; color: #777; }
+.hud-alert { animation: alertPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+@keyframes alertPop { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
+.hud-alert-title { font-size: 11px; margin-bottom: 12px; }
+.hud-alert-details { display: flex; justify-content: space-between; font-size: 9px; color: #888; margin-bottom: 12px; }
+.hud-alert-details div { display: flex; flex-direction: column; gap: 4px; }
+.hud-alert-details b { color: #fff; font-size: 12px; }
 
-/* Mini stats row */
-.feed-stats {
-  display: flex; justify-content: space-between; margin-top: 12px;
-  padding-top: 10px; border-top: 1px solid rgba(255,255,255,.08);
-}
-.feed-stats div {
-  display: flex; flex-direction: column; align-items: center; gap: 2px;
-}
-.feed-stats b { font-size: 14px; }
-.feed-stats span { font-size: 7px; color: #555; }
+.hud-bar-container { width: 100%; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+.hud-bar-fill { height: 100%; background: var(--orange); transition: width 0.3s ease-out; }
 
-/* ── Scene Particles ────────────────────────────────────────── */
-.scene-particle {
+/* Ambient Particles */
+.ambient-particle {
   position: absolute; border-radius: 50%; background: var(--orange);
-  opacity: 0; animation: sceneFloat 5s ease-in-out infinite; pointer-events: none; z-index: 1;
+  opacity: 0; animation: ambientFloat infinite; pointer-events: none; z-index: 0;
 }
-@keyframes sceneFloat {
-  0% { opacity: 0; transform: translateY(0) scale(.5); }
-  25% { opacity: .6; }
-  75% { opacity: .2; }
-  100% { opacity: 0; transform: translateY(-80px) scale(0); }
+@keyframes ambientFloat {
+  0% { opacity: 0; transform: translateY(0) scale(0.5); }
+  30% { opacity: 0.5; }
+  70% { opacity: 0.2; }
+  100% { opacity: 0; transform: translateY(-100px) scale(0); }
 }
 
 .scroll-note {
