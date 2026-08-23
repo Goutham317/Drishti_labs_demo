@@ -14,15 +14,23 @@ export default function Navbar() {
           <span>DRISHTI LABS</span>
           
         </a>
-        <div className="nav-links">
-          <a href="#problem">Problem</a>
-          <a href="#solution">Solution</a>
-          <a href="#product">Product</a>
-          <a href="#team">Team</a>
-        </div>
-        <a className="nav-cta mono" href="mailto:infosdrishtilabs@gmail.com">
-          Request a demo
-        </a>
+       {/* Inside Navbar.jsx, near the bottom of the component */}
+<div className="nav-links">
+  <a href="#problem">Problem</a>
+  <a href="#solution">Solution</a>
+  <a href="#product">Product</a>
+  <a href="#team">Team</a>
+</div>
+
+
+
+<a className="nav-cta mono" href="mailto:infosdrishtilabs@gmail.com">
+  Request a demo
+</a>
+{/* NEW: Sign In Button */}
+<a className="mono" href="/signin" style={{ marginRight: '20px', color: '#ff641f', textDecoration: 'none' }}>
+  Sign In
+</a>
       </div>
     </nav>
   )

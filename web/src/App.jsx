@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect } from 'react'
 import './App.css'
 
 import Navbar from './components/Navbar'
@@ -10,18 +10,10 @@ import IntelligenceSection from './components/IntelligenceSection'
 import TeamSection from './components/TeamSection'
 import CTASection from './components/CTASection'
 import Footer from './components/Footer'
+import SignIn from './components/SignIn' 
+import SignUp from './components/SignUp'
 
 function App() {
-  const orbRef = useRef(null)
-
-  // ── Orb Cursor Follower ──
-  const handlePointerMove = useCallback((e) => {
-    if (orbRef.current) {
-      orbRef.current.style.left = e.clientX + 'px'
-      orbRef.current.style.top = e.clientY + 'px'
-    }
-  }, [])
-
   // ── Intersection Observer for Reveal Animations ──
   useEffect(() => {
     const reveals = document.querySelectorAll('.reveal')
@@ -52,17 +44,21 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // ── Pointer move listener ──
-  useEffect(() => {
-    window.addEventListener('pointermove', handlePointerMove)
-    return () => window.removeEventListener('pointermove', handlePointerMove)
-  }, [handlePointerMove])
+  // ── Routing Logic ──
+  const isSignIn = window.location.pathname === '/signin';
+  const isSignUp = window.location.pathname === '/signup';
 
+  if (isSignIn) {
+    return <SignIn />
+  }
+
+  if (isSignUp) {
+    return <SignUp />
+  }
+
+  // ── Main Landing Page Render ──
   return (
     <>
-      {/* Cursor orb */}
-      <div className="orb" ref={orbRef}></div>
-
       {/* Navigation */}
       <Navbar />
 
