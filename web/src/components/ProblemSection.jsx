@@ -5,7 +5,6 @@ export default function ProblemSection() {
   return (
     <section id="problem">
       <div className="container reveal">
-        <div className="section-kicker mono">01 / THE PROBLEM</div>
         <h2 className="section-title">
           You can&rsquo;t fix what
           <br />

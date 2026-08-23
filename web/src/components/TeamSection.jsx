@@ -38,7 +38,6 @@ export default function TeamSection() {
   return (
     <section id="team">
       <div className="container reveal">
-        <div className="section-kicker mono">05 / BUILT AT IIT MADRAS</div>
         <h2 className="section-title">
           Civil engineering meets{' '}
           <span className="orange">computer vision.</span>
