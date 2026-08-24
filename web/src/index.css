@@ -22,10 +22,7 @@ html {
 }
 
 body {
-  background:
-    radial-gradient(900px 560px at 88% 4%, rgba(255, 87, 25, 0.24), transparent 58%),
-    radial-gradient(700px 500px at 3% 58%, rgba(255, 76, 20, 0.08), transparent 60%),
-    var(--bg);
+  background: var(--bg);
   color: var(--text);
   font-family: Manrope, system-ui, sans-serif;
   overflow-x: hidden;
