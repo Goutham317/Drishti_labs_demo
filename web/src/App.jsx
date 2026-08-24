@@ -8,11 +8,13 @@ import SolutionSection from './components/SolutionSection'
 import ProductSection from './components/ProductSection'
 import IntelligenceSection from './components/IntelligenceSection'
 import TeamSection from './components/TeamSection'
+import BlogSection from './components/BlogSection'
 import CTASection from './components/CTASection'
 import Footer from './components/Footer'
 import SignIn from './components/SignIn' 
 import SignUp from './components/SignUp'
 import Dashboard from './components/Dashboard'
+import BlogPage from './components/BlogPage' // Ensure this is imported!
 
 function App() {
   // ── Intersection Observer ──
@@ -40,14 +42,19 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // ── Page Routing ──
   const isSignIn = window.location.pathname === '/signin';
   const isSignUp = window.location.pathname === '/signup';
   const isDashboard = window.location.pathname === '/dashboard';
+  const isBlogPage = window.location.pathname === '/blog'; 
 
+  // If the URL matches, return that specific page and STOP rendering the landing page
   if (isDashboard) return <Dashboard />
   if (isSignIn) return <SignIn />
   if (isSignUp) return <SignUp />
+  if (isBlogPage) return <BlogPage /> 
 
+  // ── Main Landing Page ──
   return (
     <>
       <Navbar />
@@ -58,6 +65,7 @@ function App() {
         <ProductSection />
         <IntelligenceSection />
         <TeamSection />
+        <BlogSection />
         <CTASection />
       </main>
       <Footer />

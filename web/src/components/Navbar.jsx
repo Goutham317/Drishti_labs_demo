@@ -29,6 +29,7 @@ export default function Navbar() {
           <a href="#solution">Solution</a>
           <a href="#product">Product</a>
           <a href="#team">Team</a>
+          <a href="/#blog">Blog</a>
         </div>
 
         <div className="nav-actions">
