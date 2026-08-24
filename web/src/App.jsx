@@ -15,19 +15,14 @@ import SignUp from './components/SignUp'
 import Dashboard from './components/Dashboard'
 
 function App() {
-  // ── Intersection Observer for Reveal Animations ──
+  // ── Intersection Observer ──
   useEffect(() => {
     const reveals = document.querySelectorAll('.reveal')
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible')
-          }
-        })
-      },
-      { threshold: 0.12 }
-    )
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('visible')
+      })
+    }, { threshold: 0.12 })
     reveals.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
   }, [])
@@ -45,45 +40,17 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // ── Routing Logic ──
   const isSignIn = window.location.pathname === '/signin';
   const isSignUp = window.location.pathname === '/signup';
   const isDashboard = window.location.pathname === '/dashboard';
 
-  // 1. Check for Dashboard First
-  if (isDashboard) {
-    return (
-      <>
-        <Dashboard />
-      </>
-    )
-  }
+  if (isDashboard) return <Dashboard />
+  if (isSignIn) return <SignIn />
+  if (isSignUp) return <SignUp />
 
-  // 2. Check for Sign In
-  if (isSignIn) {
-    return (
-      <>
-        <SignIn />
-      </>
-    )
-  }
-
-  // 3. Check for Sign Up
-  if (isSignUp) {
-    return (
-      <>
-        <SignUp />
-      </>
-    )
-  }
-
-  // ── Main Landing Page Render ──
   return (
     <>
-      {/* Navigation */}
       <Navbar />
-
-      {/* Main Content */}
       <main id="top">
         <HeroSection />
         <ProblemSection />
@@ -93,7 +60,6 @@ function App() {
         <TeamSection />
         <CTASection />
       </main>
-
       <Footer />
     </>
   )
