@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect } from 'react'
 import './App.css'
 
 import Navbar from './components/Navbar'
@@ -8,36 +8,23 @@ import SolutionSection from './components/SolutionSection'
 import ProductSection from './components/ProductSection'
 import IntelligenceSection from './components/IntelligenceSection'
 import TeamSection from './components/TeamSection'
+import BlogSection from './components/BlogSection'
 import CTASection from './components/CTASection'
 import Footer from './components/Footer'
 import SignIn from './components/SignIn' 
 import SignUp from './components/SignUp'
-import Dashboard from './components/Dashboard' // <-- Ensure this file exists!
+import Dashboard from './components/Dashboard'
+import BlogPage from './components/BlogPage' // Ensure this is imported!
 
 function App() {
-  const orbRef = useRef(null)
-
-  // ── Orb Cursor Follower ──
-  const handlePointerMove = useCallback((e) => {
-    if (orbRef.current) {
-      orbRef.current.style.left = e.clientX + 'px'
-      orbRef.current.style.top = e.clientY + 'px'
-    }
-  }, [])
-
-  // ── Intersection Observer for Reveal Animations ──
+  // ── Intersection Observer ──
   useEffect(() => {
     const reveals = document.querySelectorAll('.reveal')
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible')
-          }
-        })
-      },
-      { threshold: 0.12 }
-    )
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('visible')
+      })
+    }, { threshold: 0.12 })
     reveals.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
   }, [])
@@ -55,57 +42,22 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // ── Pointer move listener ──
-  useEffect(() => {
-    window.addEventListener('pointermove', handlePointerMove)
-    return () => window.removeEventListener('pointermove', handlePointerMove)
-  }, [handlePointerMove])
-
-  // ── Routing Logic ──
+  // ── Page Routing ──
   const isSignIn = window.location.pathname === '/signin';
   const isSignUp = window.location.pathname === '/signup';
   const isDashboard = window.location.pathname === '/dashboard';
+  const isBlogPage = window.location.pathname === '/blog'; 
 
-  // 1. Check for Dashboard First
-  if (isDashboard) {
-    return (
-      <>
-        <div className="orb" ref={orbRef}></div>
-        <Dashboard />
-      </>
-    )
-  }
+  // If the URL matches, return that specific page and STOP rendering the landing page
+  if (isDashboard) return <Dashboard />
+  if (isSignIn) return <SignIn />
+  if (isSignUp) return <SignUp />
+  if (isBlogPage) return <BlogPage /> 
 
-  // 2. Check for Sign In
-  if (isSignIn) {
-    return (
-      <>
-        <div className="orb" ref={orbRef}></div>
-        <SignIn />
-      </>
-    )
-  }
-
-  // 3. Check for Sign Up
-  if (isSignUp) {
-    return (
-      <>
-        <div className="orb" ref={orbRef}></div>
-        <SignUp />
-      </>
-    )
-  }
-
-  // ── Main Landing Page Render ──
+  // ── Main Landing Page ──
   return (
     <>
-      {/* Cursor orb */}
-      <div className="orb" ref={orbRef}></div>
-
-      {/* Navigation */}
       <Navbar />
-
-      {/* Main Content */}
       <main id="top">
         <HeroSection />
         <ProblemSection />
@@ -113,9 +65,9 @@ function App() {
         <ProductSection />
         <IntelligenceSection />
         <TeamSection />
+        <BlogSection />
         <CTASection />
       </main>
-
       <Footer />
     </>
   )

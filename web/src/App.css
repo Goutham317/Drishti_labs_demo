@@ -333,3 +333,323 @@ section { padding: 130px 0; position: relative; }
   .footer-grid { grid-template-columns: 1fr; gap: 30px; }
   .footer-bottom { flex-direction: column; gap: 10px; }
 }
+
+.signin-card {
+  /* ... keep your existing styles (padding, width, background, etc.) ... */
+
+  /* Adds a very subtle crisp edge to the box */
+  border: 1px solid rgba(255, 100, 31, 0.08);
+
+  /* Creates the soft, blended orange gradient outside the box */
+  box-shadow: 
+    0 0 80px -15px rgba(255, 100, 31, 0.2), 
+    0 0 30px -5px rgba(255, 100, 31, 0.1);
+}
+
+.signup-card {
+  /* ... keep your existing styles (padding, width, background, etc.) ... */
+
+  /* Adds a very subtle crisp edge to the box */
+  border: 1px solid rgba(255, 100, 31, 0.08);
+
+  /* Creates the soft, blended orange gradient outside the box */
+  box-shadow: 
+    0 0 80px -15px rgba(255, 100, 31, 0.2), 
+    0 0 30px -5px rgba(255, 100, 31, 0.1);
+}
+
+.signin-logo {
+  /* Increase this number to make the logo larger */
+  width: 50px; 
+  
+  /* Keeps the image from stretching out of proportion */
+  height: auto; 
+  
+  /* Ensures there is breathing room below the logo */
+  margin-bottom: 20px; 
+  
+  /* Optional: If you want to slightly round the corners of the white box */
+  border-radius: 8px; 
+}
+
+.signup-logo {
+  /* Increase this number to make the logo larger */
+  width: 50px; 
+  
+  /* Keeps the image from stretching out of proportion */
+  height: auto; 
+  
+  /* Ensures there is breathing room below the logo */
+  margin-bottom: 20px; 
+  
+  /* Optional: If you want to slightly round the corners of the white box */
+  border-radius: 8px; 
+}
+
+/* --- Centered Hero Layout --- */
+.centered-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 85vh;
+  padding-top: 100px;
+}
+
+.hero-inner-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Fixes your orange text! */
+.highlight {
+  color: #ff641f;
+}
+
+.title-scan-container {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  margin-bottom: 30px;
+  padding-top: 40px; /* Gives space above the text for the drone */
+}
+
+.hero-title {
+  font-size: 4.5rem;
+  line-height: 1.1;
+  margin: 0;
+  position: relative;
+  z-index: 2; /* Text sits above the beam */
+}
+
+.centered-subtitle {
+  max-width: 800px;
+  margin: 0 auto 40px auto;
+  line-height: 1.6;
+  color: #a0a0a0;
+}
+
+
+/* --- Independent Problem Drone --- */
+.problem-scan-container {
+  position: relative;
+  display: inline-block;
+  padding-top: 110px; /* Keeps the drone flying at a high altitude */
+}
+.problem-drone {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 3;
+  animation: scanProblem 4s ease-in-out infinite alternate;
+}
+.problem-beam {
+  width: 180px;
+  height: 200px; /* Reaches down to the text */
+  background: linear-gradient(to bottom, rgba(255, 100, 31, 0.4) 0%, rgba(255, 100, 31, 0) 100%);
+  clip-path: polygon(40% 0, 60% 0, 100% 100%, 0% 100%);
+  margin-top: -5px; 
+  pointer-events: none; 
+}
+@keyframes scanProblem {
+  0% { transform: translateX(0px); }
+  100% { transform: translateX(300px); } /* Scans wide across the sentence */
+}
+
+
+/* --- Independent Solution Drone --- */
+.solution-scan-container {
+  position: relative;
+  display: inline-block;
+  padding-top: 110px; /* Keeps the drone flying at a high altitude */
+  margin-bottom: 20px;
+}
+.solution-drone {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 3;
+  animation: scanSolution 4s ease-in-out infinite alternate;
+}
+.solution-beam {
+  width: 180px;
+  height: 200px; /* Reaches down to the text */
+  background: linear-gradient(to bottom, rgba(255, 100, 31, 0.4) 0%, rgba(255, 100, 31, 0) 100%);
+  clip-path: polygon(40% 0, 60% 0, 100% 100%, 0% 100%);
+  margin-top: -5px; 
+  pointer-events: none; 
+}
+@keyframes scanSolution {
+  0% { transform: translateX(0px); }
+  100% { transform: translateX(250px); } /* Scans wide across the sentence */
+}
+/* --- Blog Section (Stripe Style) --- */
+.blog-header {
+  margin-bottom: 60px;
+}
+
+.blog-subtitle {
+  color: #a0a0a0;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.blog-grid {
+  display: grid;
+  /* Automatically creates columns based on screen size */
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+/* The clickable card */
+.blog-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #111; /* Slightly lighter than the black background */
+  border: 1px solid #222;
+  border-radius: 12px;
+  padding: 35px 30px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* Smooth hover lift and orange border glow */
+.blog-card:hover {
+  transform: translateY(-5px);
+  border-color: #ff641f;
+  box-shadow: 0 10px 30px rgba(255, 100, 31, 0.05);
+}
+
+.blog-category {
+  color: #ff641f;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 15px;
+  display: inline-block;
+}
+
+.blog-title {
+  color: #ffffff;
+  font-size: 1.5rem;
+  line-height: 1.3;
+  margin: 0 0 40px 0;
+  font-weight: 500;
+}
+
+.blog-meta {
+  margin-top: auto; /* Pushes the meta data to the very bottom of the card */
+  display: flex;
+  align-items: center;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.meta-dot {
+  margin: 0 10px;
+  font-size: 0.8rem;
+}
+
+.blog-actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* --- Blog Slider (Landing Page) --- */
+.blog-slider-container {
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  /* Hides the scrollbar for a cleaner look */
+  -ms-overflow-style: none;  
+  scrollbar-width: none;  
+}
+.blog-slider-container::-webkit-scrollbar {
+  display: none;
+}
+
+.blog-slider-track {
+  display: flex;
+  gap: 30px;
+  width: max-content;
+}
+
+.slider-card {
+  width: 350px; /* Fixed width so they form a nice row */
+  flex-shrink: 0;
+}
+
+.arrow-btn {
+  background: transparent;
+  border: 1px solid #444;
+  color: white;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: all 0.3s ease;
+}
+.arrow-btn:hover {
+  border-color: #ff641f;
+  color: #ff641f;
+}
+
+/* --- Blog Submission Form (New Page) --- */
+.blog-submission-form {
+  background-color: #111;
+  padding: 40px;
+  border-radius: 12px;
+  border: 1px solid #222;
+  max-width: 800px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  color: #fff;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.form-group input, .form-group textarea {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  color: white;
+  padding: 12px 15px;
+  border-radius: 8px;
+  font-family: inherit;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus, .form-group textarea:focus {
+  outline: none;
+  border-color: #ff641f;
+}
+
+.form-group input[type="file"] {
+  padding: 9px 15px; /* Adjusts padding for file upload button */
+  color: #888;
+}
