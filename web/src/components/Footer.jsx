@@ -10,7 +10,7 @@ export default function Footer() {
         {/* Top section: Brand + Columns */}
         <div className="footer-grid">
           {/* Brand Column */}
-          <div className="footer-brand">
+          <div className="footer-brand reveal-fade reveal-delay-1">
             <a href="#top" className="footer-logo-link">
               <img 
                 src={myLogo} 
@@ -53,7 +53,7 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div className="footer-col">
+          <div className="footer-col reveal-fade reveal-delay-2">
             <h4>Company</h4>
             <ul>
               <li><a href="#problem">The Problem</a></li>
@@ -64,7 +64,7 @@ export default function Footer() {
           </div>
 
           {/* Services */}
-          <div className="footer-col">
+          <div className="footer-col reveal-fade reveal-delay-3">
             <h4>Services</h4>
             <ul>
               <li><a href="#product">Bridge Inspection</a></li>
@@ -75,7 +75,7 @@ export default function Footer() {
           </div>
 
           {/* Contact */}
-          <div className="footer-col">
+          <div className="footer-col reveal-fade reveal-delay-4">
             <h4>Get in Touch</h4>
             <ul className="footer-contact">
               <li>

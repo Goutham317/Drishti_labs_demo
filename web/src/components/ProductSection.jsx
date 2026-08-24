@@ -39,7 +39,7 @@ export default function ProductSection() {
         </h2>
         <div className="steps">
           {steps.map((step, i) => (
-            <div className="step" key={i}>
+            <div className={`step reveal-fade reveal-delay-${i + 1}`} key={i}>
               <div className="step-num">{step.num}</div>
               <h3>{step.title}</h3>
               <p>{step.desc}</p>

@@ -23,15 +23,15 @@ export default function ProblemSection() {
         </div>
         
         <div className="stats">
-          <div className="stat">
+          <div className="stat reveal-fade reveal-delay-1">
             <div className="number">1,644</div>
             <p>Structural-collapse deaths in a single year.</p>
           </div>
-          <div className="stat">
+          <div className="stat reveal-fade reveal-delay-2">
             <div className="number">147</div>
             <p>Bridges flagged critically distressed in the IBMS inventory.</p>
           </div>
-          <div className="stat">
+          <div className="stat reveal-fade reveal-delay-3">
             <div className="number">1.7 L</div>
             <p>Highway structures reported with no condition record.</p>
           </div>

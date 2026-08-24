@@ -14,8 +14,11 @@ export default function BlogPage() {
   return (
     <>
       <Navbar />
-      <main style={{ paddingTop: '120px', paddingBottom: '100px' }}>
+      <main style={{ paddingTop: '120px', paddingBottom: '100px', position: 'relative' }}>
         
+        {/* Ambient Backgrounds for the Blog Page */}
+        <div className="ambient-blob" style={{ position: 'absolute', top: '-20%', left: '-10%', zIndex: '-1' }}></div>
+        <div className="ambient-blob--2" style={{ position: 'absolute', bottom: '0', right: '-10%', zIndex: '-1' }}></div>
         {/* SECTION 1: All Articles */}
         <div className="container">
           
@@ -75,7 +78,7 @@ export default function BlogPage() {
               <textarea rows="10" placeholder="Write your article here..." required></textarea>
             </div>
 
-            <button type="submit" className="btn-primary" style={{ backgroundColor: '#ff641f', color: 'white', padding: '15px 30px', borderRadius: '30px', border: 'none', fontWeight: 'bold', cursor: 'pointer', marginTop: '20px' }}>
+            <button type="submit" className="btn-primary" style={{ background: 'linear-gradient(135deg, #ff641f, #b026ff)', color: 'white', padding: '15px 30px', borderRadius: '30px', border: 'none', fontWeight: 'bold', cursor: 'pointer', marginTop: '20px', boxShadow: '0 4px 15px rgba(176, 38, 255, 0.3)' }}>
               Submit Article for Review
             </button>
           </form>

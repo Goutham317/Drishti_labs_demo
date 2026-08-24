@@ -21,7 +21,17 @@ export default function Navbar() {
             /* 👇 Added inline style to increase the logo size! */
             style={{ height: '50px', width: 'auto' }} 
           />
-          {!scrolled && <span className="brand-text">DRISHTI LABS</span>}
+          <span 
+            className="brand-text" 
+            style={{ 
+              opacity: scrolled ? 0 : 1, 
+              transition: 'opacity 0.3s ease, visibility 0.3s ease',
+              pointerEvents: scrolled ? 'none' : 'auto',
+              visibility: scrolled ? 'hidden' : 'visible'
+            }}
+          >
+            DRISHTI LABS
+          </span>
         </a>
 
         <div className="nav-links">
