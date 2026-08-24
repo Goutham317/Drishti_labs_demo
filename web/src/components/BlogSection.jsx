@@ -32,17 +32,13 @@ export default function BlogSection() {
             </h2>
             <p className="blog-subtitle">News, engineering updates, and industry insights.</p>
           </div>
-          
-          <div className="slider-arrows">
-            <button onClick={() => scroll('left')} className="arrow-btn">←</button>
-            <button onClick={() => scroll('right')} className="arrow-btn">→</button>
-          </div>
         </div>
 
-        <div className="blog-slider-container" ref={sliderRef}>
-          <div className="blog-slider-track">
-            {blogPosts.map((post) => (
-              <div className="blog-card slider-card" key={post.id}>
+        <div className="marquee-container reveal">
+          <div className="marquee-track">
+            {/* Double the posts to create a seamless infinite loop */}
+            {[...blogPosts, ...blogPosts].map((post, i) => (
+              <div className="blog-card slider-card" key={i}>
                 <span className="blog-category">{post.category}</span>
                 <h3 className="blog-title">{post.title}</h3>
                 <div className="blog-meta">
@@ -55,7 +51,7 @@ export default function BlogSection() {
           </div>
         </div>
 
-        <div className="blog-actions" style={{ marginTop: '40px' }}>
+        <div className="blog-actions reveal reveal-delay-2" style={{ marginTop: '40px', display: 'flex', justifyContent: 'center' }}>
           <a href="/blog" className="btn-secondary" style={{ backgroundColor: 'transparent', color: 'white', padding: '12px 24px', borderRadius: '30px', border: '1px solid #333', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'none' }}>
             Visit Full Blog & Contribute →
           </a>

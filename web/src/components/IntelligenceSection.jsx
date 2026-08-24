@@ -30,26 +30,17 @@ export default function IntelligenceSection() {
               <div className="line cb-t2"></div>
               <div className="arc"></div>
             </div>
-            <div className="box one">
-              <b>CORROSION · HIGH</b>
-            </div>
-            <div className="box two">
-              <b>CRACK · 3.2mm</b>
-            </div>
-            <div className="box three">
-              <b>DEFECT</b>
-            </div>
           </div>
           <div className="console-bottom">
-            <div>
+            <div className="reveal-fade reveal-delay-1">
               <b>96.8%</b>
               <small>CONFIDENCE</small>
             </div>
-            <div>
+            <div className="reveal-fade reveal-delay-2">
               <b>17</b>
               <small>OBSERVATIONS</small>
             </div>
-            <div>
+            <div className="reveal-fade reveal-delay-3">
               <b>01</b>
               <small>ASSET RECORD</small>
             </div>

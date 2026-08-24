@@ -3,11 +3,15 @@ import drishtiLogo from '../assets/Drishtilabs_logo.png'; // Make sure this matc
 export default function SignUp() {
   return (
     <div className="signin-page"> {/* We can reuse the signin CSS classes! */}
+      {/* Ambient Backgrounds for the Auth Pages */}
+      <div className="ambient-blob" style={{ position: 'absolute', top: '-10%', left: '-10%', zIndex: '0' }}></div>
+      <div className="ambient-blob--2" style={{ position: 'absolute', bottom: '-10%', right: '-10%', zIndex: '0' }}></div>
+
       <div className="signin-card">
         <a href="/" className="back-link mono">← BACK TO HOME</a>
         <img src={drishtiLogo} alt="Drishti Labs" className="signin-logo" />
         <h2>Create an Account</h2>
-        <p className="mono" style={{ color: '#888', marginBottom: '20px' }}>JOIN DRISHTI LABS</p>
+        <p className="mono" style={{ color: '#888', marginBottom: '15px', fontSize: '12px' }}>JOIN DRISHTI LABS</p>
 
         <form className="signin-form" onSubmit={(e) => e.preventDefault()}>
           <div className="input-group">
@@ -27,7 +31,7 @@ export default function SignUp() {
             <input type="password" placeholder="Create a strong password" required />
           </div>
 
-          <button type="submit" className="btn primary full-width" style={{ marginTop: '20px' }}>Create Account</button>
+          <button type="submit" className="btn primary full-width" style={{ marginTop: '15px' }}>Create Account</button>
         </form>
 
         <div className="divider">
@@ -39,7 +43,7 @@ export default function SignUp() {
           Sign up with Google
         </button>
 
-        <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '14px', color: '#888' }}>
+        <p style={{ textAlign: 'center', marginTop: '15px', fontSize: '12px', color: '#888' }}>
           Already have an account? <a href="/signin" style={{ color: '#ff641f', textDecoration: 'none' }}>Sign In here</a>
         </p>
       </div>

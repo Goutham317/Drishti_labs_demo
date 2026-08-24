@@ -41,17 +41,21 @@ export default function SignIn() {
 
   return (
     <div className="signin-page">
+      {/* Ambient Backgrounds for the Auth Pages */}
+      <div className="ambient-blob" style={{ position: 'absolute', top: '-10%', left: '-10%', zIndex: '0' }}></div>
+      <div className="ambient-blob--2" style={{ position: 'absolute', bottom: '-10%', right: '-10%', zIndex: '0' }}></div>
+
       <div className="signin-card">
         <a href="/" className="back-link mono">← BACK TO HOME</a>
         <img src={drishtiLogo} alt="Drishti Labs" className="signin-logo" />
         <h2>Welcome Back</h2>
-        <p className="mono" style={{ color: '#888', marginBottom: '20px' }}>LOG IN TO YOUR DASHBOARD</p>
+        <p className="mono" style={{ color: '#888', marginBottom: '15px', fontSize: '12px' }}>LOG IN TO YOUR DASHBOARD</p>
 
         {/* 4. Connect the form to our state and submit function */}
         <form className="signin-form" onSubmit={handleSignIn}>
           
           {/* Display error messages if they exist */}
-          {error && <div style={{ color: '#ff4444', marginBottom: '15px', fontSize: '14px' }}>{error}</div>}
+          {error && <div style={{ color: '#ff4444', marginBottom: '15px', fontSize: '13px' }}>{error}</div>}
 
           <div className="input-group">
             <label>Email Address</label>
@@ -78,7 +82,7 @@ export default function SignIn() {
             <a href="#forgot">Forgot password?</a>
           </div>
 
-          <button type="submit" className="btn primary full-width" disabled={isLoading}>
+          <button type="submit" className="btn primary full-width" disabled={isLoading} style={{ marginTop: '10px' }}>
             {isLoading ? 'Signing In...' : 'Sign In'}
           </button>
         </form>
@@ -92,7 +96,7 @@ export default function SignIn() {
           Sign in with Google
         </button>
 
-        <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '14px', color: '#888' }}>
+        <p style={{ textAlign: 'center', marginTop: '15px', fontSize: '12px', color: '#888' }}>
           Don't have an account? <a href="/signup" style={{ color: '#ff641f', textDecoration: 'none' }}>Sign Up here</a>
         </p>
       </div>

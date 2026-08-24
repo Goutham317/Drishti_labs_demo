@@ -44,7 +44,7 @@ export default function TeamSection() {
         </h2>
         <div className="team-grid">
           {members.map((m, i) => (
-            <div className="person" key={i}>
+            <div className={`person reveal-fade reveal-delay-${i + 1}`} key={i}>
               <div className="avatar">{m.initials}</div>
               <h3>{m.name}</h3>
               <p>

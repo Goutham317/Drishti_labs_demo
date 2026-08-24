@@ -19,7 +19,7 @@ import BlogPage from './components/BlogPage' // Ensure this is imported!
 function App() {
   // ── Intersection Observer ──
   useEffect(() => {
-    const reveals = document.querySelectorAll('.reveal')
+    const reveals = document.querySelectorAll('.reveal, .reveal-fade')
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) entry.target.classList.add('visible')
