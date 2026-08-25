@@ -40,6 +40,7 @@ export default function Navbar() {
           <a href="#product">Product</a>
           <a href="#team">Team</a>
           <a href="/#blog">Blog</a>
+          <a href="/gallery">Gallery</a>
         </div>
 
         <div className="nav-actions">

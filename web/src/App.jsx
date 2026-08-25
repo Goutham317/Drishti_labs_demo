@@ -15,6 +15,7 @@ import SignIn from './components/SignIn'
 import SignUp from './components/SignUp'
 import Dashboard from './components/Dashboard'
 import BlogPage from './components/BlogPage' // Ensure this is imported!
+import GalleryPage from './components/GalleryPage'
 
 function App() {
   // ── Intersection Observer ──
@@ -153,12 +154,14 @@ function App() {
   const isSignUp = window.location.pathname === '/signup';
   const isDashboard = window.location.pathname === '/dashboard';
   const isBlogPage = window.location.pathname === '/blog'; 
+  const isGallery = window.location.pathname === '/gallery';
 
   // If the URL matches, return that specific page and STOP rendering the landing page
   if (isDashboard) return <Dashboard />
   if (isSignIn) return <SignIn />
   if (isSignUp) return <SignUp />
   if (isBlogPage) return <BlogPage /> 
+  if (isGallery) return <GalleryPage />
 
   // ── Main Landing Page ──
   return (
