@@ -673,3 +673,12 @@ section { padding: 130px 0; position: relative; }
   padding: 9px 15px; /* Adjusts padding for file upload button */
   color: #888;
 }
+/* --- The Perfect Orange-to-Purple Gradient --- */
+.text-gradient {
+  /* Fades from Orange -> Pink/Magenta -> Deep Purple */
+  background: linear-gradient(90deg, #ff641f 0%, #eb3369 50%, #9d4edd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent; 
+}
