@@ -37,11 +37,11 @@ export default function SolutionSection() {
           </p>
         </div>
         
-        <div className="compare reveal">
+        <div className="compare">
           {comparisons.map((item, i) => (
-            <div className="compare-row" key={i}>
+            <div className={`compare-row reveal-fade reveal-delay-${i + 1}`} key={i}>
               <div>{item.label}</div>
-              <div className={item.highlight ? 'orange' : ''}>
+              <div className={item.highlight ? 'orange-solid' : ''}>
                 {item.value}
               </div>
             </div>

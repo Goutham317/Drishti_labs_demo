@@ -4,22 +4,31 @@
 
 .container { width: min(var(--max), calc(100% - 48px)); margin: auto; }
 .mono { font-family: "DM Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; }
-.orange { color: var(--orange); }
+.orange { 
+  background: linear-gradient(135deg, var(--orange), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+.orange-solid {
+  color: var(--orange);
+}
 
 /* ── Ambient Floating Blobs ──────────────────────────────────── */
 .ambient-blob {
   position: fixed; top: 0; left: 0;
   width: 700px; height: 700px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,100,31,.22) 0%, rgba(255,60,15,.07) 40%, transparent 70%);
+  background: radial-gradient(circle, rgba(176,38,255,.20) 0%, rgba(255,100,31,.08) 40%, transparent 70%);
   pointer-events: none; z-index: 0;
   will-change: transform, width, height, opacity;
   mix-blend-mode: screen;
-  opacity: 0.7;
+  opacity: 0.4;
 }
 .ambient-blob--2 {
   width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(255,80,20,.18) 0%, rgba(255,60,15,.05) 45%, transparent 70%);
-  opacity: 0.3;
+  background: radial-gradient(circle, rgba(255,100,31,.15) 0%, rgba(176,38,255,.05) 45%, transparent 70%);
+  opacity: 0.15;
 }
 
 /* ── Nav ────────────────────────────────────────────────────── */
@@ -243,7 +252,13 @@ section { padding: 130px 0; position: relative; }
 .compare-row div:last-child { color: #eee; }
 
 /* ── Product ────────────────────────────────────────────────── */
-.product { background: linear-gradient(180deg, #080808, #0b0806); border-top: 1px solid rgba(255,100,31,.18); border-bottom: 1px solid rgba(255,100,31,.12); }
+.product { 
+  background: rgba(8, 8, 8, 0.3); 
+  backdrop-filter: blur(12px); 
+  -webkit-backdrop-filter: blur(12px); 
+  border-top: 1px solid rgba(255,100,31,.18); 
+  border-bottom: 1px solid rgba(255,100,31,.12); 
+}
 .steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 60px; }
 .step { padding: 26px; border: 1px solid var(--line); min-height: 230px; background: rgba(255,255,255,.015); transition: .35s; }
 .step:hover { transform: translateY(-8px); border-color: rgba(255,100,31,.45); background: rgba(255,100,31,.05); }
@@ -282,8 +297,8 @@ section { padding: 130px 0; position: relative; }
 .person h3 { font-size: 17px; font-family: 'Manrope', sans-serif; } .person p { color: #777; font-size: 12px; line-height: 1.55; margin-top: 7px; font-family: 'Manrope', sans-serif; }
 
 /* ── CTA ────────────────────────────────────────────────────── */
-.cta { padding: 150px 0 120px; text-align: center; overflow: hidden; }
-.cta::before { content: ""; position: absolute; width: 700px; height: 400px; background: radial-gradient(circle, rgba(255,90,25,.25), transparent 65%); left: 50%; top: 50%; transform: translate(-50%,-50%); pointer-events: none; }
+.cta { padding: 220px 0 180px; text-align: center; overflow: hidden; position: relative; }
+.cta::before { content: ""; position: absolute; width: 500px; height: 300px; background: radial-gradient(circle, rgba(255,90,25,.08), transparent 50%); left: 50%; top: 50%; transform: translate(-50%,-50%); pointer-events: none; }
 .cta h2 { font-size: clamp(48px, 7vw, 96px); letter-spacing: -.065em; line-height: .95; position: relative; font-family: 'Manrope', sans-serif; }
 .cta p { color: #888; margin: 25px auto 32px; max-width: 520px; line-height: 1.7; position: relative; font-family: 'Manrope', sans-serif; }
 
@@ -321,8 +336,59 @@ section { padding: 130px 0; position: relative; }
 .powered-name { font-size: 14px; color: #999; font-weight: 600; transition: .3s; }
 
 /* ── Reveal ─────────────────────────────────────────────────── */
-.reveal { opacity: 0; transform: translateY(35px); transition: opacity .8s ease, transform .8s ease; }
-.reveal.visible { opacity: 1; transform: none; }
+/* Smooth, premium reveal animation (from bottom) */
+.reveal { 
+  opacity: 0; 
+  transform: translateY(50px) scale(0.98); 
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1); 
+  will-change: opacity, transform;
+}
+.reveal.visible { 
+  opacity: 1; 
+  transform: translateY(0) scale(1); 
+}
+
+/* Smooth fade in place without movement */
+.reveal-fade {
+  opacity: 0;
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
+}
+.reveal-fade.visible {
+  opacity: 1;
+}
+
+/* Stagger utility classes for grouped reveals */
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+.reveal-delay-6 { transition-delay: 0.6s; }
+.reveal-delay-7 { transition-delay: 0.7s; }
+.reveal-delay-8 { transition-delay: 0.8s; }
+
+/* ── Marquee (Blogs) ────────────────────────────────────────── */
+.marquee-container {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  padding: 20px 0; /* Add padding to prevent hover effect clipping */
+}
+.marquee-track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation: marqueeLoop 30s linear infinite;
+  will-change: transform;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+@keyframes marqueeLoop {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-50% - 10px)); }
+}
 
 /* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 900px) {
@@ -429,6 +495,13 @@ section { padding: 130px 0; position: relative; }
 .highlight {
   color: #ff641f;
 }
+.highlight-gradient {
+  background: linear-gradient(135deg, #ff641f, #b026ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
 
 .title-scan-container {
   position: relative;
@@ -533,20 +606,20 @@ section { padding: 130px 0; position: relative; }
 .blog-card {
   display: flex;
   flex-direction: column;
-  background-color: #111; /* Slightly lighter than the black background */
-  border: 1px solid #222;
+  border: 1px solid transparent;
   border-radius: 12px;
   padding: 35px 30px;
   text-decoration: none;
   transition: all 0.3s ease;
   cursor: pointer;
+  background: linear-gradient(#111, #111) padding-box, linear-gradient(135deg, #222, #222) border-box;
 }
 
 /* Smooth hover lift and orange border glow */
 .blog-card:hover {
   transform: translateY(-5px);
-  border-color: #ff641f;
-  box-shadow: 0 10px 30px rgba(255, 100, 31, 0.05);
+  background: linear-gradient(#111, #111) padding-box, linear-gradient(135deg, var(--orange), var(--purple)) border-box;
+  box-shadow: 0 10px 30px rgba(176, 38, 255, 0.1);
 }
 
 .blog-category {
