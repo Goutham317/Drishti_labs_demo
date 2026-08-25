@@ -112,6 +112,42 @@ function App() {
     }
   }, [])
 
+  // 👇 ADDED: The Scrolling Drone Logic 👇
+  useEffect(() => {
+    const handleDroneScroll = () => {
+      const drone = document.getElementById('global-drone');
+      const problemSection = document.getElementById('problem');
+      const solutionSection = document.getElementById('solution');
+      
+      if (!drone || !problemSection || !solutionSection) return;
+
+      // Find where the sections are on the page
+      const probTop = problemSection.offsetTop;
+      const solTop = solutionSection.offsetTop;
+      const scrollY = window.scrollY;
+      const middleOfScreen = scrollY + (window.innerHeight / 2);
+
+      // 1. Fade the drone in and out
+      if (scrollY < probTop - window.innerHeight * 0.5 || scrollY > solTop + 400) {
+         drone.style.opacity = '0';
+      } else {
+         drone.style.opacity = '1';
+      }
+
+      // 2. Make it fly down when you scroll halfway between them
+      if (middleOfScreen < (probTop + solTop) / 2) {
+         drone.style.top = `${probTop + 100}px`; // Fly over Problem
+      } else {
+         drone.style.top = `${solTop + 100}px`; // Fly down to Solution
+      }
+    };
+
+    window.addEventListener('scroll', handleDroneScroll, { passive: true });
+    setTimeout(handleDroneScroll, 500); 
+    return () => window.removeEventListener('scroll', handleDroneScroll);
+  }, []);
+  // 👆 END OF ADDED DRONE LOGIC 👆
+
   // ── Page Routing ──
   const isSignIn = window.location.pathname === '/signin';
   const isSignUp = window.location.pathname === '/signup';
@@ -132,7 +168,25 @@ function App() {
       <div className="ambient-blob ambient-blob--2" id="ambient-blob-2"></div>
 
       <Navbar />
-      <main id="top">
+      
+      {/* 👇 ADDED: style={{ position: 'relative' }} to main 👇 */}
+      <main id="top" style={{ position: 'relative' }}> 
+        
+        {/* 👇 ADDED: The Drone Visuals 👇 */}
+        <div id="global-drone">
+          <div className="global-scanner">
+            <svg width="70" height="30" viewBox="0 0 70 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="25" y="12" width="20" height="10" rx="3" fill="#222" stroke="#444" strokeWidth="2"/>
+              <circle cx="35" cy="17" r="3" fill="#ff641f" />
+              <path d="M25 14L10 8M45 14L60 8" stroke="#444" strokeWidth="3" strokeLinecap="round" />
+              <line x1="2" y1="6" x2="18" y2="6" stroke="#888" strokeWidth="2" strokeLinecap="round" />
+              <line x1="52" y1="6" x2="68" y2="6" stroke="#888" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+            <div className="global-beam"></div>
+          </div>
+        </div>
+        {/* 👆 END OF ADDED DRONE VISUALS 👆 */}
+
         <HeroSection />
         <ProblemSection />
         <SolutionSection />

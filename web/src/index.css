@@ -112,3 +112,41 @@ a {
 .social-btn:hover { background: rgba(255,255,255,0.08) !important; }
 .social-icon { height: 18px; width: 18px; }
 
+/* --- HIDE OLD DRONES --- */
+.problem-drone, .solution-drone {
+  display: none !important;
+}
+
+/* --- ADD NEW SCROLLING DRONE --- */
+#global-drone {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  z-index: 50; 
+  pointer-events: none;
+  opacity: 0; 
+  /* The transition is what makes it "fly" smoothly when you scroll */
+  transition: top 1.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease-in-out; 
+}
+
+.global-scanner {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: scanHeadings 4s ease-in-out infinite alternate;
+}
+
+.global-beam {
+  width: 180px;
+  height: 200px; 
+  background: linear-gradient(to bottom, rgba(255, 100, 31, 0.4) 0%, rgba(255, 100, 31, 0) 100%);
+  clip-path: polygon(40% 0, 60% 0, 100% 100%, 0% 100%);
+  margin-top: -5px; 
+}
+
+@keyframes scanHeadings {
+  0% { transform: translateX(10%); }
+  100% { transform: translateX(400px); } 
+}

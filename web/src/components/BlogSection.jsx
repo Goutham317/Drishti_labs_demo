@@ -1,15 +1,4 @@
-import { useRef } from 'react';
-
 export default function BlogSection() {
-  const sliderRef = useRef(null);
-
-  const scroll = (direction) => {
-    if (sliderRef.current) {
-      const scrollAmount = direction === 'left' ? -350 : 350;
-      sliderRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    }
-  };
-
   const blogPosts = [
     { id: 1, category: 'Product Updates', title: 'Introducing the next generation of infrastructure scanning.', date: 'Aug 12, 2026', readTime: '4 min read' },
     { id: 2, category: 'Engineering', title: 'How we built a millimeter-accurate measurement drone model.', date: 'Jul 28, 2026', readTime: '6 min read' },
